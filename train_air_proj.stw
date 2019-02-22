@@ -1,0 +1,12 @@
+;	STMicroelectronics Workspace file
+
+[Version]
+Keyword=ST7Workspace-V0.7
+
+[Project0]
+Filename=train_air_proj.stp
+Dependencies=
+[Options]
+ActiveProject=train_air_proj
+ActiveConfig=Release
+AddSortedElements=0
