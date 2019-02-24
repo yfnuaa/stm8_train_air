@@ -2,6 +2,7 @@
  * 
  * Copyright (c) 2002-2005 STMicroelectronics
  */
+#define  SYSTEM_C   1
 #include "system.h"
 #include "pm25.h"
 #include "co2.h"
@@ -16,18 +17,10 @@
 #include "utility.h"
 
 
-enum system_mode
-{
-    e_auto_mode = 0,
-    e_manual_mode,
-    e_sleep_mode,
-    e_power_off_mode
-};
-
 #define SYSTEM_SENSOR_DETECT_INTERVAL           2   // 2S
 #define SYSTEM_LCD_REFLUSH_INTERVAL             10   //10S
 
-uint8_t g_system_mode = e_auto_mode;
+enum system_mode g_system_mode = e_auto_mode;
 
 uint8_t g_system_lcd_flush_time = 0;
 uint8_t g_system_lcd_need_flush = 1;
@@ -42,17 +35,18 @@ void read_serial_no(void)
     serialno |= (u32)( FLASH_ReadByte(SERIALNO + 2))<<8; 
     serialno |=        FLASH_ReadByte(SERIALNO + 3);
     
-    g_pm25_dust_density =(u16) (serialno / 1000);
+    g_pm25_dust_density =(uint16_t) (serialno / 1000);
     g_pm25_dust_density += 10000; //show A01 234 //serial no 1234
-    g_co2_value = (u16)(serialno % 1000);
+    g_co2_value = (uint16_t)(serialno % 1000);
     #endif
 }
 
- 
+//Def
+
 void main()
 {
-    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
-    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1); // set system clock 2 div freq //system 8M speed running 
+    //CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+    //CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1); // set system clock 2 div freq //system 8M speed running 
 
     touch_key_Init();
     
@@ -63,17 +57,38 @@ void main()
     uart1_init(); 
     
     lcd_init();
-     
+    
     timer1_init();
-    timer4_init();
+    //timer4_init();
     
     enableInterrupts(); 
-    
+     
     adc1_start();
     
-    timer1_start();
+    print_enter();
+    print_enter();
+    print("System Power On");
     
-    print("POW");
+    //beep_on_ms(800);
+
+    pwm_init();
+    //pwm_set_duty(e_speed_middle);
+
+    print_enter();
+    print_enter();
+    delay_ms(20000);
+    pwm_set_duty(e_speed_middle);
+        
+    while( 1 )
+    {
+        delay_ms(10000);
+        //print("Test ...");
+        //pwm_set_duty(e_speed_middle);
+        //print_uint16_t("g_adc1_pm25_ad_value = ", g_adc1_pm25_ad_value);
+        //print_uint16_t("g_adc1_co2_ad_value  = ", g_adc1_co2_ad_value);
+        adc1_start();
+    }
+    
 
     //上电自检
     //上电 LCD 全亮一下
@@ -89,13 +104,11 @@ void main()
             delay_s(SYSTEM_SENSOR_DETECT_INTERVAL);
             g_system_lcd_flush_time += SYSTEM_SENSOR_DETECT_INTERVAL;
             
-            //ADC 检测
-            
             if( g_pm25_need_detect )    
             {
                 pm25_set_detect_begin();
             }
-            
+            //ADC start
             adc1_start();
             while( g_adc1_is_ok == 1 );
             
@@ -136,7 +149,7 @@ void main()
             case e_auto_mode: 
                 if( g_co2_density > 30 )
                 {
-                    pwm_set_duty(50);
+                    pwm_set_motor_speed(e_speed_middle);
                 }
                 else
                 {

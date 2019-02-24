@@ -10,3 +10,6 @@ Dependencies=
 ActiveProject=train_air_proj
 ActiveConfig=Release
 AddSortedElements=0
+[Batch Build]
+Debug=train_air_proj
+Release=train_air_proj

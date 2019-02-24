@@ -7,6 +7,7 @@
   * @date    :
   */ 
 #include "stm8s.h"
+#include "pwm.h"
 
 #define LCD_BACK_LIGHT_PORT       GPIOB
 #define LCD_BACK_LIGHT_PIN        GPIO_PIN_4
@@ -146,7 +147,7 @@ void ht1621_light_up_always_on_seg(void)
 }
 
  
-void lcd_update_indicate_progress(u16 pm25, u16 c02, u8 fan_sept, u8 air_quality)
+void lcd_update_indicate_progress(uint16_t pm25, uint16_t c02, u8 fan_sept, u8 air_quality)
 {   //S2  S3  S4  S9 S17  alawys on
     //PM25 value
     u8 temp=0;
@@ -213,9 +214,9 @@ void lcd_update_indicate_progress(u16 pm25, u16 c02, u8 fan_sept, u8 air_quality
 /******************************************************
 写数据函数,cnt为传送数据位数,数据传送为低位在前
 *******************************************************/
-void ht1621_write_data(uchar Data,uchar cnt)
+void ht1621_write_data(uint8_t Data,uint8_t cnt) 
 {
-    uchar i;
+    uint8_t i;
     for (i=0;i<cnt;i++)
     {
        WR_LOW;
@@ -231,7 +232,7 @@ void ht1621_write_data(uchar Data,uchar cnt)
 }
  
 /********************************************************
-函数名称：void ht1621_write_command(uchar Cmd)
+函数名称：void ht1621_write_command(uint8_t Cmd)
 功能描述: HT1621命令写入函数
 全局变量：无
 参数说明：Cmd为写入命令数据
@@ -239,7 +240,7 @@ void ht1621_write_data(uchar Data,uchar cnt)
  
 说 明：写入命令标识位100
 ********************************************************/
-void ht1621_write_command(uchar Cmd)
+void ht1621_write_command(uint8_t Cmd)
 {
     CS_LOW;
     _Nop();
@@ -249,14 +250,14 @@ void ht1621_write_command(uchar Cmd)
     _Nop();
 }
 /********************************************************
-函数名称：void ht1621_write_one_data_4bits(uchar Addr,uchar Data)
+函数名称：void ht1621_write_one_data_4bits(uint8_t Addr,uint8_t Data)
 功能描述: HT1621在指定地址写入数据函数
 全局变量：无
 参数说明：Addr为写入初始地址，Data为写入数据
 返回说明：无
 说 明：因为HT1621的数据位4位，所以实际写入数据为参数的后4位
 ********************************************************/
-void ht1621_write_one_data_4bits(uchar Addr,uchar Data)
+void ht1621_write_one_data_4bits(uint8_t Addr,uint8_t Data)
 {
     CS_LOW;
     ht1621_write_data(0xa0,3); //写入数据标志101
@@ -267,7 +268,7 @@ void ht1621_write_one_data_4bits(uchar Addr,uchar Data)
 }
 /********************************************************
 HT1621测试程序，2008-2-13, 22:41:43
-函数名称：void ht1621_write_all_data(uchar Addr,uchar *p,uchar cnt)
+函数名称：void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
 功能描述: HT1621连续写入方式函数
 全局变量：无
 参数说明：Addr为写入初始地址，*p为连续写入数据指针，
@@ -276,9 +277,9 @@ HT1621测试程序，2008-2-13, 22:41:43
 说 明：HT1621的数据位4位，此处每次数据为8位，写入数据
            总数按8位计算
 ********************************************************/
-void ht1621_write_all_data(uchar Addr,uchar *p,uchar cnt)
+void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
 {
-    uchar i;
+    uint8_t i;
     CS_LOW;
     ht1621_write_data(0xa0,3); //写入数据标志101
     ht1621_write_data((u8)(Addr<<2),6); //写入地址数据
@@ -289,12 +290,6 @@ void ht1621_write_all_data(uchar Addr,uchar *p,uchar cnt)
     }
     CS_HIGH;
     _Nop();
-}
-
-
-void lcd_clear_screen(void)
-{
-    //ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
 }
 
 /********************************************************
@@ -311,6 +306,7 @@ void ht1621_init(void)
     CS_HIGH;
     WR_HIGH;
     DA_HIGH;
+    
    //  DelayMS(2000);      //延时使LCD工作电压稳定
     ht1621_write_command(BIAS_1_3BIAS);
     ht1621_write_command(RC256 ); //使用内部振荡器
@@ -370,6 +366,46 @@ void lcd_update_memory_loop(void)
             g_ht1621_tab[i] =    g_Ht1621Tab[i];        
         }
     }
+}
+
+
+void lcd_clear_screen(void)
+{
+    //ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
+}
+
+
+void lcd_display_pm25( uint16_t pm25 )
+{
+}
+
+
+void lcd_display_co2( uint16_t pm25 )
+{
+}
+
+
+void lcd_display_fan_speed( enum pwm_motor_speed_step step )
+{
+    switch( step )
+    {
+        case e_speed_low:
+            break;
+            
+        case e_speed_middle:
+            break;
+            
+        case e_speed_high:
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+void lcd_display_air_quality( uint16_t quality )
+{
 }
 
 
