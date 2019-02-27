@@ -181,17 +181,17 @@ seg31                       | 31
 */                        
 void ht1621_light_up_always_on_seg(void)
 {
-    g_Ht1621Tab[0]|= 0x01;ht1621_write_one_data_4bits((u8)(0<<1), g_Ht1621Tab[0]);//S3
-    g_Ht1621Tab[1]|= 0x01;ht1621_write_one_data_4bits((u8)(1<<1), g_Ht1621Tab[1]);//S4
-    g_Ht1621Tab[4]|= 0x01;ht1621_write_one_data_4bits((u8)(4<<1), g_Ht1621Tab[4]);//S9
-    g_Ht1621Tab[5]|= 0x01;ht1621_write_one_data_4bits((u8)(5<<1), g_Ht1621Tab[5]);//S2
-    g_Ht1621Tab[2]|= 0x01;ht1621_write_one_data_4bits((u8)(2<<1), g_Ht1621Tab[2]);//S1
+    g_Ht1621Tab[0]|= 0x01;ht1621_write_one_data_4bits((u8)(0), g_Ht1621Tab[0]);//S3
+    g_Ht1621Tab[1]|= 0x01;ht1621_write_one_data_4bits((u8)(1), g_Ht1621Tab[1]);//S4
+    g_Ht1621Tab[4]|= 0x01;ht1621_write_one_data_4bits((u8)(4), g_Ht1621Tab[4]);//S9
+    g_Ht1621Tab[5]|= 0x01;ht1621_write_one_data_4bits((u8)(5), g_Ht1621Tab[5]);//S2
+    g_Ht1621Tab[2]|= 0x01;ht1621_write_one_data_4bits((u8)(2), g_Ht1621Tab[2]);//S1
     
-    g_Ht1621Tab[6]|= 0x0F;ht1621_write_one_data_4bits((u8)(6<<1), g_Ht1621Tab[6]);//S5
+    g_Ht1621Tab[6]|= 0x0F;ht1621_write_one_data_4bits((u8)(6), g_Ht1621Tab[6]);//S5
     //g_Ht1621Tab[3]|= 0x01;//S6
     //g_Ht1621Tab[3]|= 0x01;//S7
     //g_Ht1621Tab[3]|= 0x01;//S8
-    g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(7<<1 + 1), (u8)(g_Ht1621Tab[7]>>4));//S10
+    g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(7 + 1), (u8)(g_Ht1621Tab[7]>>4));//S10
  
 }           
  void ht1621_fill_digital_code(u8 di, u8 temp)
@@ -224,8 +224,8 @@ void ht1621_light_up_always_on_seg(void)
         g_Ht1621Tab[di]|= 0x40;
     else
         g_Ht1621Tab[di]&=(u8)~0x40; 
-    ht1621_write_one_data_4bits((u8)(di<<1), g_Ht1621Tab[di]);
-    ht1621_write_one_data_4bits((u8)(di<<1 + 1), (u8)(g_Ht1621Tab[di]>>4));
+    ht1621_write_one_data_4bits((u8)(di), g_Ht1621Tab[di]);
+    ht1621_write_one_data_4bits((u8)(di+ 1), (u8)(g_Ht1621Tab[di]>>4));
 }
 
  
@@ -357,11 +357,11 @@ void lcd_update_memory_loop(void)
         {
             if(g_ht1621_tab[i]&0xF != g_Ht1621Tab[i]&(u8)0xF)
             {
-                ht1621_write_one_data_4bits((u8)(i<<1),g_Ht1621Tab[i]);
+                ht1621_write_one_data_4bits((u8)(i),g_Ht1621Tab[i]);
             }
             if(g_ht1621_tab[i]&0xF0 != g_Ht1621Tab[i]&(u8)0xF0)
             {
-                ht1621_write_one_data_4bits((u8)(i<<1 + 1),(u8)(g_Ht1621Tab[i]>>4));
+                ht1621_write_one_data_4bits((u8)(i + 1),(u8)(g_Ht1621Tab[i]>>4));
             }
             g_ht1621_tab[i] =    g_Ht1621Tab[i];        
         }
@@ -434,15 +434,15 @@ void lcd_display_fan_speed( u8 step)
     if(step == 0)
     { 
         g_Ht1621Tab[7]|= 0x10;    
-	g_Ht1621Tab[7]&= (u8)(~0x90);
-	g_Ht1621Tab[7]&= (u8)(~0x50); 
-	g_Ht1621Tab[7]&= (u8)(~0x30); 
+	      g_Ht1621Tab[7]&= (u8)(~0x90);
+        g_Ht1621Tab[7]&= (u8)(~0x50); 
+	      g_Ht1621Tab[7]&= (u8)(~0x30); 
     }
     else if(step<=e_speed_low)
     {
         g_Ht1621Tab[7]|= 0x90; 
         g_Ht1621Tab[7]&= (u8)(~0x50); 
-	g_Ht1621Tab[7]&= (u8)(~0x30); 	
+	      g_Ht1621Tab[7]&= (u8)(~0x30); 	
     }
     else if(step<=e_speed_middle)
     {
@@ -456,9 +456,9 @@ void lcd_display_fan_speed( u8 step)
         g_Ht1621Tab[7]|= 0x50; 
         g_Ht1621Tab[7]|= 0x30; 
     }
-    ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
-    ht1621_write_one_data_4bits((u8)(7<<1 + 1),(u8)(g_Ht1621Tab[7]>>4));
-	#if 0
+    //ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
+    ht1621_write_one_data_4bits((u8)(7 + 1),(u8)(g_Ht1621Tab[7]>>4));
+#if 0
     switch( step )
      {
         case e_speed_low:
@@ -473,7 +473,7 @@ void lcd_display_fan_speed( u8 step)
         default:
         break;
     }
-		#endif
+#endif
 }
 
 
@@ -498,8 +498,8 @@ void lcd_display_air_quality( uint16_t air_quality )
         g_Ht1621Tab[6]&= (u8)(~0x40);
         g_Ht1621Tab[6]&= (u8)(~0x80); 	
     }
-    //ht1621_write_one_data_4bits((u8)(6<<1),g_Ht1621Tab[6]);
-    ht1621_write_one_data_4bits((u8)(6<<1 + 1),(u8)(g_Ht1621Tab[6]>>4));
+    //ht1621_write_one_data_4bits((u8)(6),g_Ht1621Tab[6]);
+    ht1621_write_one_data_4bits((u8)(6 + 1),(u8)(g_Ht1621Tab[6]>>4));
 }
 
 
@@ -532,5 +532,28 @@ void lcd_init(void)
     }    
 
     lcd_back_light_on();
+}
+void lcd_test(void)
+{
+    u8 i,j;
+    u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
+    for(i=0;i<=15;i++)    
+    {
+        for(j=1;j<=0xFF;)
+        { 
+	    if(j<=0x0F)
+	    {
+                ht1621_write_one_data_4bits((u8)(i<<1),g_Ht1621Tab[i]);
+            }
+            else
+	    {
+                ht1621_write_one_data_4bits((u8)(i<<1 + 1),(u8)(g_Ht1621Tab[i]>>4));
+            }
+            j=j<<1+1;
+            
+        }
+        i++;
+    }
 }
 

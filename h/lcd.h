@@ -20,6 +20,6 @@ void lcd_display_pm25( uint16_t pm25 );
 void lcd_display_co2( uint16_t pm25 );
 void lcd_display_fan_speed( u8 step );
 void lcd_display_air_quality( uint16_t quality );
-
+void lcd_test(void);
 
 #endif
