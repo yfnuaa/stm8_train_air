@@ -107,7 +107,7 @@ void touch_key_gpio_isr(void)
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
         print("Key Press:   Power");
-        print_enter();
+         
         g_touch_key_power_pressed = 1;
         
     }
@@ -164,7 +164,12 @@ void touch_key_interrupt_able(enum e_touch_key key, uint8_t able)
 
 void touch_key_Init(void)
 {
+ 
     GPIO_Init(TOUCH_KEY_PORT, TOUCH_KEY_ALL_PIN, GPIO_MODE_IN_FL_IT);
+    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_4, GPIO_MODE_IN_FL_IT);
+    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_5, GPIO_MODE_IN_FL_IT);
+    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_6, GPIO_MODE_IN_FL_IT);
+    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_7, GPIO_MODE_IN_FL_IT);
     EXTI_SetExtIntSensitivity(TOUCH_KEY_EXTI_PORT, EXTI_SENSITIVITY_RISE_ONLY);
 }
 

@@ -50,11 +50,11 @@ void main()
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
 		#endif
-
+    timer1_init();
     touch_key_Init();
     uart1_init(); 
     adc1_init();
-
+    enableInterrupts(); 
     #if 0
     while(1)
     {
@@ -66,40 +66,31 @@ void main()
     beep_init(); 
     lcd_init();
     lcd_test();
-    #if 0
-    enableInterrupts(); 
-    timer4_start_280us();
-    while(1)
-    {
-    }
-    #endif
+ 
     
     pwm_init();
     pm25_init();
     
-    
-    //timer1_init();
-    //timer4_start_40us();
-    
-    enableInterrupts(); 
-     
-    adc1_start();
-    
+ 
  
     print("System Power On");
  
 
-    #if 0
+    #if 1
     while( 1 )
     {
-        pm25_led_off();
-        delay_ms(100);
+      //  adc1_start();
+ 
         pm25_led_on();
-        delay_ms(100);
+        delay_280us();
+        pm25_led_off();
+        delay_40us();
+      
+        delay_ms(1000);
     }
     #endif
     
-    while( 1 )
+    while( 0 )
     {
         
         //print("RE ...");

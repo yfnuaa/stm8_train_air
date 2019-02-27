@@ -15,6 +15,13 @@ struct interrupt_vector
     */
     return;
 }
+
+extern void touch_key_gpio_isr(void);
+@far @interrupt void EXTI_PORT_C_ISR(void)
+{
+    touch_key_gpio_isr();
+}
+
 extern void adc1_isr(void);
 @far @interrupt void ADC1_IRQHandler(void)
 {
@@ -49,11 +56,11 @@ struct interrupt_vector const _vectab[] = {
     {0x82, NonHandledInterrupt}, /* irq2  */
     {0x82, NonHandledInterrupt}, /* irq3  */
     {0x82, NonHandledInterrupt}, /* irq4  */
-    {0x82, NonHandledInterrupt}, /* irq5  */
+    {0x82, EXTI_PORT_C_ISR},     /* irq5  */
     {0x82, NonHandledInterrupt}, /* irq6  */
     {0x82, NonHandledInterrupt}, /* irq7  */
     {0x82, NonHandledInterrupt}, /* irq8  */
-    {0x82, NonHandledInterrupt}, /* irq9  */
+    {0x82, NonHandledInterrupt},      /* irq9  */
     {0x82, NonHandledInterrupt}, /* irq10 */
     {0x82, TM1_INTER_ISR      }, /* irq11 TIME1*/
     {0x82, NonHandledInterrupt}, /* irq12 */

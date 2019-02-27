@@ -20,15 +20,22 @@ unsigned char HexTable[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D
 
 void uart1_init(void)
 {
-    #if DEBUG
+#if DEBUG
+    
     UART1->CR1 = 0x00;
     UART1->CR2 = 0x00;
     UART1->CR3 = 0x00;
-
+#ifdef USE_DEFAULT_CLK_2M
     UART1->BRR2 = UART_BRR2;
     UART1->BRR1 = UART_BRR1;
-
+#else
+    UART1->BRR2 = UART_BRR2;
+    UART1->BRR1 = UART_BRR1;
+#endif
     UART1->CR2=0x2c;    //允许接收，发送，开接收中断
+    UART1_Init((u32)9600, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO, 
+        UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TX_ENABLE);//|UART1_MODE_RX_ENABLE);
+    UART1_Cmd(ENABLE);
     #endif
 }
 

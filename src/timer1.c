@@ -24,10 +24,8 @@ void timer1_isr(void)
             g_beep_need_on = 0;
             beep_derect_off();
         }
-            
-    }
+}
     #endif
-
     TIM1_ClearITPendingBit(TIM1_IT_UPDATE);
 }
 

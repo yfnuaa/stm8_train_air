@@ -32,14 +32,14 @@ uint8_t g_pm25_delay_40us_ok = 0;
 void pm25_led_off(void)
 {
     PM25_LED_PORT->ODR |= (uint8_t)( PM25_LED_PIN);
-    g_pm25_is_led_on = 1;
+    g_pm25_is_led_on = 0;
 }
 
 
 void pm25_led_on(void)
 {
     PM25_LED_PORT->ODR &= (uint8_t)(~PM25_LED_PIN);
-    g_pm25_is_led_on = 0;
+    g_pm25_is_led_on = 1;
 }
 
 
@@ -89,12 +89,18 @@ void pm25_set_detect_end(void)
     print("pm25_led_off");
 }
 
-
+//PD_DDR     CR1      CR2
+//  0         0        0    float             input     pullup resistor is off
+//  0         1        0    pullup            input     pullup resistor is on 
+//  0         0        1    interrup float    input     pullup resistor is off 
+//  0         1        1    interrup pullup   input     pullup resistor is on //  1         0        0    open-drain        output    pullup resistor is off 
+//  1         1        0    push-pull         output    pullup resistor is off    
+//  1         x        1    quick 10Mhz       output    pullup resistor is off 
 void pm25_init(void)
 {
     PM25_LED_PORT->DDR |= PM25_LED_PIN;    
     PM25_LED_PORT->CR1 |= PM25_LED_PIN;    
-    PM25_LED_PORT->CR2 &=(u8)( ~(PM25_LED_PIN));  
+    PM25_LED_PORT->CR2 |= PM25_LED_PIN; //&=(u8)( ~(PM25_LED_PIN));  
 
     pm25_led_off();
 }

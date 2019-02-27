@@ -32,7 +32,7 @@ void beep_derect_on(void)
     lcd_tone_on();
     #endif
 
-    g_beep_is_on = 0;   
+    g_beep_is_on = 1;   
 }
 
 
@@ -43,7 +43,7 @@ void beep_derect_off(void)
     #else
     lcd_tone_off();
     #endif
-
+    
     g_beep_is_on = 0;   
 }
 

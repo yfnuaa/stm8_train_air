@@ -26,25 +26,25 @@ void adc1_isr(void)
 {
     uint8_t tempL = 0;
     uint16_t tempH = 0;
-   
+    print("adc isr");
     //PM2.5
     tempL = ADC1->DB3RL;
     tempH = ADC1->DB3RH;
     tempH = (uint16_t)(tempL | (uint16_t)(tempH << (uint8_t)8));     
     //g_adc1_pm25_ad_value = (uint16_t)(VOLTAGE_REF*temp/SYSTEM_ADC_RESOLUTION_RATIO);
     g_adc1_pm25_ad_value = tempH;
-    
+    print_u16("pm25 ", g_adc1_pm25_ad_value);
     //MG812
     tempL = ADC1->DB4RL;
     tempH = ADC1->DB4RH;
     tempH = (uint16_t)(tempL | (uint16_t)(tempH << (uint8_t)8));
     //g_adc1_co2_ad_value = (uint16_t)(VOLTAGE_MG812_REF*temp/SYSTEM_ADC_RESOLUTION_RATIO);
     g_adc1_co2_ad_value = tempH;
-
+    print_u16("c02", g_adc1_co2_ad_value);
     ADC1->CSR = ADC1_IT_EOCIE | ADC1_CHANNEL_4;
 
-    print("x");
     
+    ADC1_ClearITPendingBit(ADC1_IT_EOC);
     g_adc1_is_ok = 1;
 }
 
