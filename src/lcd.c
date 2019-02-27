@@ -8,6 +8,7 @@
   */ 
 #include "stm8s.h"
 #include "pwm.h"
+#include "debug.h"
 
 #define LCD_BACK_LIGHT_PORT       GPIOB
 #define LCD_BACK_LIGHT_PIN        GPIO_PIN_4
@@ -54,9 +55,6 @@
 
 #define WR_HIGH LCD_WR_PORT->ODR |= (uint8_t)( LCD_WR_PIN)
 #define WR_LOW  LCD_WR_PORT->ODR &= (uint8_t)(~LCD_WR_PIN)
-
-
-
 
 //u8 BCD_table[]= {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0xa, 0xb ， 0xc,0xd,0xe , 0xF};
 u8 DIG_CODE[] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f ,0x77,0x7C,0x39,0x5e,0x79,0x71}; //数码管数字表
@@ -426,8 +424,8 @@ void lcd_init(void)
 	LCD_WR_PORT->CR2 &= (u8)(~LCD_WR_PIN);
     
     LCD_DA_PORT->DDR |= (u8)LCD_DA_PIN;
-    LCD_DA_PORT->CR1 &= (u8)(~GPIO_PIN_2);
-	LCD_DA_PORT->CR2 &= (u8)(~GPIO_PIN_2);
+    LCD_DA_PORT->CR1 &= (u8)(~LCD_DA_PIN);
+	LCD_DA_PORT->CR2 &= (u8)(~LCD_DA_PIN);
     
     ht1621_init();
     
@@ -435,8 +433,8 @@ void lcd_init(void)
     for(i=0;i<8;i++)
     {
         g_ht1621_tab[i]=0;
-    }
-    
+    }    
+
     lcd_back_light_on();
 }
 

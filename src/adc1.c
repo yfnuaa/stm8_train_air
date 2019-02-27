@@ -11,7 +11,7 @@
 #include "debug.h"
 
 
-#define ADC_CONVERSION_SPEED            ADC1_PRESSEL_FCPU_D4
+#define ADC_CONVERSION_SPEED            ADC1_PRESSEL_FCPU_D2
 
 #define SYSTEM_ADC_RESOLUTION_RATIO     1023.0
 #define VOLTAGE_REF                     5000.0  //mv
@@ -32,9 +32,6 @@ void adc1_isr(void)
     tempH = ADC1->DB3RH;
     tempH = (uint16_t)(tempL | (uint16_t)(tempH << (uint8_t)8));     
     //g_adc1_pm25_ad_value = (uint16_t)(VOLTAGE_REF*temp/SYSTEM_ADC_RESOLUTION_RATIO);
-
-    
-
     g_adc1_pm25_ad_value = tempH;
     
     //MG812
@@ -46,6 +43,8 @@ void adc1_isr(void)
 
     ADC1->CSR = ADC1_IT_EOCIE | ADC1_CHANNEL_4;
 
+    print("x");
+    
     g_adc1_is_ok = 1;
 }
 

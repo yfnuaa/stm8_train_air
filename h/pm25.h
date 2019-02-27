@@ -21,8 +21,13 @@ extern uint8_t g_pm25_need_detect;
 
 extern uint16_t g_pm25_dust_density;
 
+extern uint8_t g_pm25_delay_480us_ok;
+extern uint8_t g_pm25_delay_40us_ok;
+
 void pm25_calculate_density(uint16_t mv);
 
+void pm25_led_on(void);
+void pm25_led_off(void);
 void pm25_power_off(void);
 void pm25_power_on(void);
 void pm25_set_detect_begin(void);

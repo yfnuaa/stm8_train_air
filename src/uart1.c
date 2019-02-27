@@ -9,8 +9,11 @@
 #include "stm8s.h"
 #include "debug.h"
 
-#define UART_BRR2   0x00    //例如对于波特率位9600时，分频系数=2000000/9600=208
-#define UART_BRR1   0x0d    //例如对于波特率位9600时，分频系数=2000000/9600=208
+//#define UART_BRR2   0x00    //例如对于波特率位9600时，分频系数=2000000/9600=208
+//#define UART_BRR1   0x0d    //例如对于波特率位9600时，分频系数=2000000/9600=208
+
+#define UART_BRR2   0x01    //例如对于波特率位115200时，分频系数=2000000/9600=17
+#define UART_BRR1   0x01    //例如对于波特率位115200时，分频系数=2000000/9600=17
 
 unsigned char HexTable[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
@@ -82,7 +85,7 @@ void print_u8(unsigned char *ptr_string, unsigned char dat)
 }
 
 
-void print_uint16_t(unsigned char *ptr_string, uint16_t dat)
+void print_u16(unsigned char *ptr_string, uint16_t dat)
 {
     #if DEBUG
     while(*ptr_string != '\0')	

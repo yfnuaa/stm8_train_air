@@ -45,21 +45,39 @@ void read_serial_no(void)
 
 void main()
 {
+    uint8_t i = 0;
     //CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
     //CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1); // set system clock 2 div freq //system 8M speed running 
 
-    touch_key_Init();
-    
-    adc1_init();
-    
-    beep_init();
-    
+    //touch_key_Init();
     uart1_init(); 
+    adc1_init();
+
+    #if 0
+    while(1)
+    {
+        print_u8("TTest --------------------------->  ", i++);
+        delay_ms(8000);
+    }
     
+    #endif
+    beep_init();
     lcd_init();
+
+    #if 0
+    enableInterrupts(); 
+    timer4_start_280us();
+    while(1)
+    {
+    }
+    #endif
     
-    timer1_init();
-    //timer4_init();
+    pwm_init();
+    pm25_init();
+    
+    
+    //timer1_init();
+    //timer4_start_40us();
     
     enableInterrupts(); 
      
@@ -69,24 +87,46 @@ void main()
     print_enter();
     print("System Power On");
     
-    //beep_on_ms(800);
-
-    pwm_init();
-    //pwm_set_duty(e_speed_middle);
-
     print_enter();
     print_enter();
-    delay_ms(20000);
-    pwm_set_duty(e_speed_middle);
-        
+
+    #if 0
     while( 1 )
     {
-        delay_ms(10000);
-        //print("Test ...");
-        //pwm_set_duty(e_speed_middle);
-        //print_uint16_t("g_adc1_pm25_ad_value = ", g_adc1_pm25_ad_value);
-        //print_uint16_t("g_adc1_co2_ad_value  = ", g_adc1_co2_ad_value);
+        pm25_led_off();
+        delay_ms(100);
+        pm25_led_on();
+        delay_ms(100);
+    }
+    #endif
+    
+    while( 1 )
+    {
+        
+        //print("RE ...");
+        //pm25_set_detect_begin()
+        print_u8("Test --------------------------->  ", i++);
+        
+        #if 1
+        pm25_set_detect_begin();
+        //timer4_start_280us();
+        delay_280us();
+        //while(g_time4_280us_ok != 0);
         adc1_start();
+        
+        //timer4_start_40us();
+        //while(g_time4_40us_ok != 0);
+        delay_40us();
+        pm25_set_detect_end();
+        
+        print_u16("g_adc1_pm25_ad_value = ", g_adc1_pm25_ad_value);
+        
+        #endif
+        
+        delay_ms(10000);
+        print_enter();
+        print_enter();
+        //delay_280us();
     }
     
 
