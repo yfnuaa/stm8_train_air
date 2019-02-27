@@ -17,7 +17,7 @@
 #define BEEP_GPIO_PORT       GPIOD
 #define BEEP_GPIO_PIN        GPIO_PIN_4
 
-
+#define GPIO_BUZZER     0
 
 volatile uint8_t g_beep_is_on = 0;
 
@@ -29,7 +29,7 @@ void beep_derect_on(void)
     #if GPIO_BUZZER
     BEEP_GPIO_PORT->ODR |= (uint8_t)( BEEP_GPIO_PIN);
     #else 
-    lcd_tone_on();
+    lcd_tone_on(); 
     #endif
 
     g_beep_is_on = 1;   

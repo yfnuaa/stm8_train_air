@@ -15,6 +15,11 @@
 extern volatile uint8_t g_beep_is_on;
 extern volatile uint8_t g_beep_timer_counter;
 extern volatile uint8_t g_beep_need_on;
+#define POWER_ON_BEEP_ON_TIME    500       //ms
+
+#define SHORT_PRESS_BEEP_ON_TIME    50       //ms
+
+#define LONG_PRESS_BEEP_ON_TIME    100       //ms
 
 void beep_derect_on(void);
 void beep_derect_off(void);

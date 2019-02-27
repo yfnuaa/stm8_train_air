@@ -59,21 +59,21 @@ void main()
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
 	#endif
-
-    timer1_init();
+    
+    lcd_init();
+    lcd_test();
     touch_key_Init();
     uart1_init();   
     adc1_init();
     enableInterrupts();
- 
+    timer1_init();
     beep_init(); 
     beep_on_ms(POWER_ON_BEEP_ON_TIME);
-    lcd_init();
-    lcd_test();
+ 
  
     
-    pwm_init();
-    pm25_init();
+   // pwm_init();
+   // pm25_init();
     
  
  
@@ -94,13 +94,13 @@ void main()
     }
     #endif
     
-    while( 0 )
+    while(1)
     {
         
         //print("RE ...");
         //pm25_set_detect_begin()
         print_u8("Test --------------------------->  ", i++);
-        
+        if(SET == g_touch_power_long_pressed)print("power ON long pressed");
         #if 1
         pm25_set_detect_begin();
         //timer4_start_280us();
@@ -141,7 +141,7 @@ void main()
                 pm25_set_detect_begin();
             }
             //ADC start
-            adc1_start();
+            //adc1_start();
             while( g_adc1_is_ok == 1 );
             
             if( g_pm25_need_detect )    
@@ -199,7 +199,8 @@ void main()
             case e_power_off_mode:             
                 break;
                
-        }        
+        } 
+        g_touch_power_long_pressed = RESET;        
     }
 }
 

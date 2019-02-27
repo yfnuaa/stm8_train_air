@@ -24,8 +24,8 @@
 #define TOUCH_KEY_ALL_PIN   ( GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6| GPIO_PIN_7 )
 
 uint8_t g_touch_key_power_pressed = 0;
-
-
+volatile BitStatus g_touch_power_long_pressed = RESET;
+volatile u16 g_touch_long_press_count = 0;
 void touch_key_plus_press(void)
 {
     if( g_system_mode == e_manual_mode )
@@ -99,12 +99,13 @@ void touch_key_power_long_press(void)
 void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
-     
+ 
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
         print("Key Press:   Power");
          
         g_touch_key_power_pressed = 1;
+        g_touch_long_press_count=1;
         
     }
 
