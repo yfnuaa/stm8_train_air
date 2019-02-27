@@ -535,7 +535,7 @@ void lcd_init(void)
 }
 void lcd_test(void)
 {
-    u8 i,j;
+    unsigned int i,j;
     u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
     ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
     for(i=0;i<=15;i++)    
@@ -544,14 +544,14 @@ void lcd_test(void)
         { 
 	          if(j<=0x0F)
 	          {
-                ht1621_write_one_data_4bits((u8)(i<<1),g_Ht1621Tab[i]);
+                ht1621_write_one_data_4bits((u8)(i),Ht1621Tab[i]);
             }
             else
             {
-                ht1621_write_one_data_4bits((u8)(i<<1 + 1),(u8)(g_Ht1621Tab[i]>>4));
+                ht1621_write_one_data_4bits((u8)(i + 1),(u8)(Ht1621Tab[i]>>4));
             }
             j=j<<1+1;
-            _Nop;_Nop;_Nop;_Nop;_Nop;_Nop;_Nop;_Nop;_Nop;
+            delay_ms(10);
         }
         i++;
     }
