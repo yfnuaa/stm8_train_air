@@ -1,0 +1,7 @@
+  delayMicroseconds(samplingTime);   
+ voMeasured = analogRead(measurePin); 
+ delayMicroseconds(deltaTime); 
+ digitalWrite(ledPower,HIGH);  
+ delayMicroseconds(sleepTime);   
+ calcVoltage = voMeasured*(5.0/1024); 
+ dustDensity = 0.17*calcVoltage-0.1;
