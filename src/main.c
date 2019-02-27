@@ -22,8 +22,7 @@
 
 enum system_mode g_system_mode = e_auto_mode;
 
-uint8_t g_system_lcd_flush_time = 0;
-uint8_t g_system_lcd_need_flush = 1;
+
 
 
 void read_serial_no(void)
@@ -76,7 +75,7 @@ void main()
     print("System Power On");
  
 
-    #if 1
+    #if 0
     while( 1 )
     {
       //  adc1_start();
@@ -85,7 +84,7 @@ void main()
         delay_280us();
         pm25_led_off();
         delay_40us();
-      
+ 
         delay_ms(1000);
     }
     #endif
@@ -131,8 +130,7 @@ void main()
         {
             //Delay
             delay_s(SYSTEM_SENSOR_DETECT_INTERVAL);
-            g_system_lcd_flush_time += SYSTEM_SENSOR_DETECT_INTERVAL;
-            
+   
             if( g_pm25_need_detect )    
             {
                 pm25_set_detect_begin();
@@ -157,18 +155,7 @@ void main()
                 co2_calculate_density(g_adc1_co2_ad_value);
             }
 
-            //LCD 更新
-            if( (g_system_lcd_need_flush != 0) &&
-                    (g_system_lcd_flush_time == SYSTEM_LCD_REFLUSH_INTERVAL) )
-            {
-                g_system_lcd_flush_time = 0;
-                
-                if( 1 ) //其他条件
-                {
-                    //LCD 更新
-                    //lcd_update_indicate_progress(g_pm25_dust_density, g_co2_value, fan_setp, air_setp);
-                }  
-            }
+         
         }
 
         
