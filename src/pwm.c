@@ -13,7 +13,7 @@
 #include "stm8s_tim2.h" 
 #include "lcd.h"
 
-u8   g_pwm_motor_speed_step = e_speed_off;
+u8 g_pwm_motor_speed_step = e_speed_off;
 
 
 void pwm_set_freq(u8 frqKZH)

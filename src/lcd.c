@@ -140,19 +140,18 @@ void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
 }
 //u8 BCD_table[]= {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0xa, 0xb ， 0xc,0xd,0xe , 0xF};
 u8 DIG_CODE[] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f ,0x77,0x7C,0x39,0x5e,0x79,0x71}; //数码管数字表
- 
 
-
-
+#if 0
 u8 g_ht1621_tab[]={0x00,0x00,0x00,0x00,
+                  0x00,0x00,0x00,0x00};
+#endif
+
+u8 g_Ht1621Tab[]={0x00,0x00,0x00,0x00,
                   0x00,0x00,0x00,0x00};
                   //     com0 com1 com2 com3 com0  com1 com2  com3 
                   //ADD0[ D0   D1   D2   D3   D0    D1   D2    D3 ]
                   //ADD2[ D0   D1   D2   D3   D4    D5   D6    D7 ]
-                  //ADD4[ D0   D1   D2   D3   D4    D5   D6    D7 ]
-u8 g_Ht1621Tab[]={0x00,0x00,0x00,0x00,
-                  0x00,0x00,0x00,0x00};
-                  
+                  //ADD4[ D0   D1   D2   D3   D4    D5   D6    D7 ]                  
                
                   
                   
@@ -182,17 +181,18 @@ seg31                       | 31
 */                        
 void ht1621_light_up_always_on_seg(void)
 {
-    g_Ht1621Tab[0]|= 0x01;//S3
-    g_Ht1621Tab[1]|= 0x01;//S4
-    g_Ht1621Tab[4]|= 0x01;//S9
-    g_Ht1621Tab[5]|= 0x01;//S2
-    g_Ht1621Tab[2]|= 0x01;//S1
+    g_Ht1621Tab[0]|= 0x01;ht1621_write_one_data_4bits((u8)(0<<1), g_Ht1621Tab[0]);//S3
+    g_Ht1621Tab[1]|= 0x01;ht1621_write_one_data_4bits((u8)(1<<1), g_Ht1621Tab[1]);//S4
+    g_Ht1621Tab[4]|= 0x01;ht1621_write_one_data_4bits((u8)(4<<1), g_Ht1621Tab[4]);//S9
+    g_Ht1621Tab[5]|= 0x01;ht1621_write_one_data_4bits((u8)(5<<1), g_Ht1621Tab[5]);//S2
+    g_Ht1621Tab[2]|= 0x01;ht1621_write_one_data_4bits((u8)(2<<1), g_Ht1621Tab[2]);//S1
     
-    g_Ht1621Tab[6]|= 0x0F;//S5
+    g_Ht1621Tab[6]|= 0x0F;ht1621_write_one_data_4bits((u8)(6<<1), g_Ht1621Tab[6]);//S5
     //g_Ht1621Tab[3]|= 0x01;//S6
     //g_Ht1621Tab[3]|= 0x01;//S7
     //g_Ht1621Tab[3]|= 0x01;//S8
-    g_Ht1621Tab[7]|= 0x10;//S10
+    g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(7<<1 + 1), (u8)(g_Ht1621Tab[7]>>4));//S10
+ 
 }           
  void ht1621_fill_digital_code(u8 di, u8 temp)
 {
@@ -347,7 +347,7 @@ void lcd_stop(void)
     ht1621_write_command(LCDOFF);
     lcd_back_light_off();
 }
- 
+ #if 0
 void lcd_update_memory_loop(void)
 {
     u8 i,j;
@@ -367,7 +367,7 @@ void lcd_update_memory_loop(void)
         }
     }
 }
-
+#endif
 
 void lcd_clear_screen(void)
 {
@@ -433,18 +433,27 @@ void lcd_display_fan_speed( u8 step)
 {
     if(step == 0)
     { 
-        g_Ht1621Tab[7]|= 0x10;       
+        g_Ht1621Tab[7]|= 0x10;    
+	g_Ht1621Tab[7]&= (u8)(~0x90);
+	g_Ht1621Tab[7]&= (u8)(~0x50); 
+	g_Ht1621Tab[7]&= (u8)(~0x30); 
     }
     else if(step<=e_speed_low)
     {
         g_Ht1621Tab[7]|= 0x90; 
+        g_Ht1621Tab[7]&= (u8)(~0x50); 
+	g_Ht1621Tab[7]&= (u8)(~0x30); 	
     }
     else if(step<=e_speed_middle)
     {
+        g_Ht1621Tab[7]|= 0x90; 
         g_Ht1621Tab[7]|= 0x50; 
+        g_Ht1621Tab[7]&= (u8)(~0x30); 		
     }
     else //if(step<=e_speed_high)
     {
+        g_Ht1621Tab[7]|= 0x90; 
+        g_Ht1621Tab[7]|= 0x50; 
         g_Ht1621Tab[7]|= 0x30; 
     }
     ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
@@ -474,16 +483,22 @@ void lcd_display_air_quality( uint16_t air_quality )
     if(0 == air_quality) //good  green      S11
     {
         g_Ht1621Tab[6]|= 0x80; 
+        g_Ht1621Tab[6]&= (u8)(~0x40);
+        g_Ht1621Tab[6]&= (u8)(~0x20); 
     }
     else if(1 == air_quality) //mid yellow  S12
     {
         g_Ht1621Tab[6]|= 0x40;
+	g_Ht1621Tab[6]&= (u8)(~0x80);
+        g_Ht1621Tab[6]&= (u8)(~0x20); 	
     }
     else if(2 == air_quality) //high red    S13
     {
         g_Ht1621Tab[6]|= 0x20; 
+        g_Ht1621Tab[6]&= (u8)(~0x40);
+        g_Ht1621Tab[6]&= (u8)(~0x80); 	
     }
-	    ht1621_write_one_data_4bits((u8)(6<<1),g_Ht1621Tab[6]);
+    //ht1621_write_one_data_4bits((u8)(6<<1),g_Ht1621Tab[6]);
     ht1621_write_one_data_4bits((u8)(6<<1 + 1),(u8)(g_Ht1621Tab[6]>>4));
 }
 
@@ -496,24 +511,24 @@ void lcd_init(void)
     //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_LOW_FAST);
 	//GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_OD_LOW_FAST);
 	//GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_OD_LOW_FAST);
-	LCD_CS_PORT->DDR |= (u8)LCD_CS_PIN;
+    LCD_CS_PORT->DDR |= (u8)LCD_CS_PIN;
     LCD_CS_PORT->CR1 &= (u8)(~LCD_CS_PIN);
-	LCD_CS_PORT->CR2 &= (u8)(~LCD_CS_PIN);
+    LCD_CS_PORT->CR2 &= (u8)(~LCD_CS_PIN);
     
     LCD_WR_PORT->DDR |= (u8)LCD_WR_PIN;
     LCD_WR_PORT->CR1 &= (u8)(~LCD_WR_PIN);
-	LCD_WR_PORT->CR2 &= (u8)(~LCD_WR_PIN);
+    LCD_WR_PORT->CR2 &= (u8)(~LCD_WR_PIN);
     
     LCD_DA_PORT->DDR |= (u8)LCD_DA_PIN;
     LCD_DA_PORT->CR1 &= (u8)(~LCD_DA_PIN);
-	LCD_DA_PORT->CR2 &= (u8)(~LCD_DA_PIN);
+    LCD_DA_PORT->CR2 &= (u8)(~LCD_DA_PIN);
     
     ht1621_init();
     
-    //memset(g_ht1621_tab,0x00,8);
+ 
     for(i=0;i<8;i++)
     {
-        g_ht1621_tab[i]=0;
+        g_Ht1621Tab[i]=0;
     }    
 
     lcd_back_light_on();
