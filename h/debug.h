@@ -9,11 +9,11 @@
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
-
+#include "system.h"
 #include "stm8s.h"
 
 #define DEBUG   1
-
+ 
 void uart1_init(void);
 void print_enter(void);
 void print(unsigned char *ptr_string);

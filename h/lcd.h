@@ -18,7 +18,7 @@ void lcd_tone_off(void);
 void lcd_tone_on(void);
 void lcd_display_pm25( uint16_t pm25 );
 void lcd_display_co2( uint16_t pm25 );
-void lcd_display_fan_speed( enum pwm_motor_speed_step step );
+void lcd_display_fan_speed( u8 step );
 void lcd_display_air_quality( uint16_t quality );
 
 

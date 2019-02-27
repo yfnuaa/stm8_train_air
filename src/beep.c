@@ -10,13 +10,14 @@
 #include "stm8s.h"
 #include "lcd.h"
 #include "debug.h"
+#include "beep.h"
 
 
 
 #define BEEP_GPIO_PORT       GPIOD
 #define BEEP_GPIO_PIN        GPIO_PIN_4
 
-#define GPIO_BUZZER     0
+
 
 volatile uint8_t g_beep_is_on = 0;
 
@@ -52,14 +53,17 @@ void beep_on_ms(uint16_t ms)
     g_beep_timer_counter = (uint8_t)(ms/10);
     beep_derect_on();
 }
+#if GPIO_BUZZER
 
 void beep_init(void)
 {
     //GPIO_Init(GPIOD,GPIO_PIN_4,GPIO_MODE_OUT_OD_LOW_FAST);
     //GPIO_Init(GPIOD,GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_SLOW); 
-    #if 1
+ 
     BEEP_GPIO_PORT->DDR |= GPIO_PIN_4;
     BEEP_GPIO_PORT->CR1 |= GPIO_PIN_4;
     BEEP_GPIO_PORT->CR2 &=(u8)( ~(GPIO_PIN_4));
-    #endif
+ 
 }
+#endif
+

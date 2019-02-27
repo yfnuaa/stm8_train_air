@@ -14,14 +14,14 @@
 
 enum time4_start_mode
 {
-	e_mode_280_us = 0,
+    e_mode_280_us = 0,
     e_mode_40_us,
     e_mode_null
 };
 
 #ifndef TIMER4_C
-extern uint8_t g_time4_280us_ok;
-extern uint8_t g_time4_40us_ok;
+extern volatile uint8_t g_time4_280us_ok;
+extern volatile uint8_t g_time4_40us_ok;
 extern enum time4_start_mode g_time4_start_mode;
 #endif
 

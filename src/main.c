@@ -46,8 +46,10 @@ void read_serial_no(void)
 void main()
 {
     uint8_t i = 0;
-    //CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
-    //CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1); // set system clock 2 div freq //system 8M speed running 
+		#ifndef USE_DEFAULT_CLK_2M
+    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
+    CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
+		#endif
 
     //touch_key_Init();
     uart1_init(); 
@@ -61,7 +63,7 @@ void main()
     }
     
     #endif
-    beep_init();
+    beep_init(); 
     lcd_init();
 
     #if 0
@@ -137,8 +139,7 @@ void main()
     //显示默认值 如 ---  ---
     while(1)
     {
-        if( (g_system_mode == e_auto_mode) || 
-                (g_system_mode == e_manual_mode))
+        if( (g_system_mode == e_auto_mode) || (g_system_mode == e_manual_mode) || (g_system_mode == e_sleep_mode))
         {
             //Delay
             delay_s(SYSTEM_SENSOR_DETECT_INTERVAL);
@@ -187,16 +188,29 @@ void main()
         {   
             //Auto mode
             case e_auto_mode: 
-                if( g_co2_density > 30 )
+                if(g_pm25_dust_density <= e_pm25_good - 100)
+                {
+                    pwm_set_motor_speed(e_speed_off);
+                }
+                else if(g_pm25_dust_density <= e_pm25_good)
+                {
+                    pwm_set_motor_speed(e_speed_low);
+                }
+                else if(g_pm25_dust_density <= e_pm25_mid)
                 {
                     pwm_set_motor_speed(e_speed_middle);
-                }
-                else
+                }		
+                else if(g_pm25_dust_density <= e_pm25_bad)
                 {
-                    //...
+                    pwm_set_motor_speed(e_speed_high);
+                }
+                else  //> e_pm25_bad
+                {
+                    pwm_set_motor_speed(e_speed_high+10);
                 }
                 break;
-
+            case e_manual_mode:
+						    break;
             //Sleep Mode
             case e_sleep_mode:
                 break;

@@ -56,6 +56,88 @@
 #define WR_HIGH LCD_WR_PORT->ODR |= (uint8_t)( LCD_WR_PIN)
 #define WR_LOW  LCD_WR_PORT->ODR &= (uint8_t)(~LCD_WR_PIN)
 
+
+ 
+/******************************************************
+写数据函数,cnt为传送数据位数,数据传送为低位在前
+*******************************************************/
+void ht1621_write_data(uint8_t Data,uint8_t cnt) 
+{
+    uint8_t i;
+    for (i=0;i<cnt;i++)
+    {
+       WR_LOW;
+       _Nop();
+       //HT1621_DAT=Data&0x80;
+       if(Data&0x80)DA_HIGH;
+       else DA_LOW;
+       _Nop();
+       WR_HIGH;
+       _Nop();
+       Data<<=1;
+   }
+}
+ 
+/********************************************************
+函数名称：void ht1621_write_command(uint8_t Cmd)
+功能描述: HT1621命令写入函数
+全局变量：无
+参数说明：Cmd为写入命令数据
+返回说明：无
+ 
+说 明：写入命令标识位100
+********************************************************/
+void ht1621_write_command(uint8_t Cmd)
+{
+    CS_LOW;
+    _Nop();
+    ht1621_write_data(0x80,4); //写入命令标志100
+    ht1621_write_data(Cmd,8); //写入命令数据
+    CS_HIGH;
+    _Nop();
+}
+/********************************************************
+函数名称：void ht1621_write_one_data_4bits(uint8_t Addr,uint8_t Data)
+功能描述: HT1621在指定地址写入数据函数
+全局变量：无
+参数说明：Addr为写入初始地址，Data为写入数据
+返回说明：无
+说 明：因为HT1621的数据位4位，所以实际写入数据为参数的后4位
+********************************************************/
+void ht1621_write_one_data_4bits(uint8_t Addr,uint8_t Data)
+{
+    CS_LOW;
+    ht1621_write_data(0xa0,3); //写入数据标志101
+    ht1621_write_data((u8)(Addr<<2),6); //写入地址数据
+    ht1621_write_data((u8)(Data<<4),4); //写入数据
+    CS_HIGH;
+    _Nop();
+}
+/********************************************************
+HT1621测试程序，2008-2-13, 22:41:43
+函数名称：void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
+功能描述: HT1621连续写入方式函数
+全局变量：无
+参数说明：Addr为写入初始地址，*p为连续写入数据指针，
+                  cnt为写入数据总数
+返回说明：无
+说 明：HT1621的数据位4位，此处每次数据为8位，写入数据
+           总数按8位计算
+********************************************************/
+void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
+{
+    uint8_t i;
+    CS_LOW;
+    ht1621_write_data(0xa0,3); //写入数据标志101
+    ht1621_write_data((u8)(Addr<<2),6); //写入地址数据
+    for (i=0; i<cnt; i++)
+    {
+        ht1621_write_data(*p,8); //写入数据
+        p++;
+    }
+    CS_HIGH;
+    _Nop();
+}
 //u8 BCD_table[]= {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0xa, 0xb ， 0xc,0xd,0xe , 0xF};
 u8 DIG_CODE[] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f ,0x77,0x7C,0x39,0x5e,0x79,0x71}; //数码管数字表
  
@@ -142,6 +224,8 @@ void ht1621_light_up_always_on_seg(void)
         g_Ht1621Tab[di]|= 0x40;
     else
         g_Ht1621Tab[di]&=(u8)~0x40; 
+    ht1621_write_one_data_4bits((u8)(di<<1), g_Ht1621Tab[di]);
+    ht1621_write_one_data_4bits((u8)(di<<1 + 1), (u8)(g_Ht1621Tab[di]>>4));
 }
 
  
@@ -207,88 +291,6 @@ void lcd_update_indicate_progress(uint16_t pm25, uint16_t c02, u8 fan_sept, u8 a
     
 }   
 
-
- 
-/******************************************************
-写数据函数,cnt为传送数据位数,数据传送为低位在前
-*******************************************************/
-void ht1621_write_data(uint8_t Data,uint8_t cnt) 
-{
-    uint8_t i;
-    for (i=0;i<cnt;i++)
-    {
-       WR_LOW;
-       _Nop();
-       //HT1621_DAT=Data&0x80;
-       if(Data&0x80)DA_HIGH;
-       else DA_LOW;
-       _Nop();
-       WR_HIGH;
-       _Nop();
-       Data<<=1;
-   }
-}
- 
-/********************************************************
-函数名称：void ht1621_write_command(uint8_t Cmd)
-功能描述: HT1621命令写入函数
-全局变量：无
-参数说明：Cmd为写入命令数据
-返回说明：无
- 
-说 明：写入命令标识位100
-********************************************************/
-void ht1621_write_command(uint8_t Cmd)
-{
-    CS_LOW;
-    _Nop();
-    ht1621_write_data(0x80,4); //写入命令标志100
-    ht1621_write_data(Cmd,8); //写入命令数据
-    CS_HIGH;
-    _Nop();
-}
-/********************************************************
-函数名称：void ht1621_write_one_data_4bits(uint8_t Addr,uint8_t Data)
-功能描述: HT1621在指定地址写入数据函数
-全局变量：无
-参数说明：Addr为写入初始地址，Data为写入数据
-返回说明：无
-说 明：因为HT1621的数据位4位，所以实际写入数据为参数的后4位
-********************************************************/
-void ht1621_write_one_data_4bits(uint8_t Addr,uint8_t Data)
-{
-    CS_LOW;
-    ht1621_write_data(0xa0,3); //写入数据标志101
-    ht1621_write_data((u8)(Addr<<2),6); //写入地址数据
-    ht1621_write_data((u8)(Data<<4),4); //写入数据
-    CS_HIGH;
-    _Nop();
-}
-/********************************************************
-HT1621测试程序，2008-2-13, 22:41:43
-函数名称：void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
-功能描述: HT1621连续写入方式函数
-全局变量：无
-参数说明：Addr为写入初始地址，*p为连续写入数据指针，
-                  cnt为写入数据总数
-返回说明：无
-说 明：HT1621的数据位4位，此处每次数据为8位，写入数据
-           总数按8位计算
-********************************************************/
-void ht1621_write_all_data(uint8_t Addr,uint8_t *p,uint8_t cnt)
-{
-    uint8_t i;
-    CS_LOW;
-    ht1621_write_data(0xa0,3); //写入数据标志101
-    ht1621_write_data((u8)(Addr<<2),6); //写入地址数据
-    for (i=0; i<cnt; i++)
-    {
-        ht1621_write_data(*p,8); //写入数据
-        p++;
-    }
-    CS_HIGH;
-    _Nop();
-}
 
 /********************************************************
 函数名称：void ht1621_init(void)
@@ -375,35 +377,114 @@ void lcd_clear_screen(void)
 
 void lcd_display_pm25( uint16_t pm25 )
 {
+  //PM25 value
+    u8 temp=0;
+    temp = (u8)(pm25%100);
+    pm25/=100;
+    temp = DIG_CODE[temp]; //led digital 1  hundred dig
+    ht1621_fill_digital_code(2, temp);
+    
+    temp = (u8)(pm25%10);
+    pm25/=10;
+    temp = DIG_CODE[temp]; //led digital 2   ten dig
+    ht1621_fill_digital_code(3, temp);
+     
+    temp = DIG_CODE[pm25]; //led digital 3   ten dig
+    ht1621_fill_digital_code(4, temp);
 }
 
 
-void lcd_display_co2( uint16_t pm25 )
-{
+void lcd_display_co2( uint16_t c02 )
+{//CO2 value
+    u8 temp=0;
+    temp = (u8)(c02%100);
+    c02/=100;
+    temp = DIG_CODE[temp]; //led digital 4  C02 hundred dig
+    ht1621_fill_digital_code(5, temp);
+    
+    temp = (u8)(c02%10);
+    c02/=10;
+    temp = DIG_CODE[temp]; //led digital 5   ten dig
+    ht1621_fill_digital_code(0, temp);
+     
+    temp = DIG_CODE[c02];  //led digital 6   ten dig
+    ht1621_fill_digital_code(1, temp);
 }
-
-
-void lcd_display_fan_speed( enum pwm_motor_speed_step step )
-{
-    switch( step )
+#if 0
+ //fan step
+    if(0 == fan_sept)
     {
+          g_Ht1621Tab[7]|= 0x10;       
+    }
+    else if(1 == fan_sept)                //S14
+    {
+          g_Ht1621Tab[7]|= 0x90; 
+    }
+    else if(2 == fan_sept)                //S15
+    {
+          g_Ht1621Tab[7]|= 0x50; 
+    }
+    else if(3 == fan_sept)                 //S16
+    {
+          g_Ht1621Tab[7]|= 0x30; 
+    }
+#endif
+void lcd_display_fan_speed( u8 step)
+{
+    if(step == 0)
+    { 
+        g_Ht1621Tab[7]|= 0x10;       
+    }
+    else if(step<=e_speed_low)
+    {
+        g_Ht1621Tab[7]|= 0x90; 
+    }
+    else if(step<=e_speed_middle)
+    {
+        g_Ht1621Tab[7]|= 0x50; 
+    }
+    else //if(step<=e_speed_high)
+    {
+        g_Ht1621Tab[7]|= 0x30; 
+    }
+    ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
+    ht1621_write_one_data_4bits((u8)(7<<1 + 1),(u8)(g_Ht1621Tab[7]>>4));
+	#if 0
+    switch( step )
+     {
         case e_speed_low:
-            break;
+        break;
             
         case e_speed_middle:
-            break;
+        break;
             
         case e_speed_high:
-            break;
+        break;
             
         default:
-            break;
+        break;
     }
+		#endif
 }
 
 
-void lcd_display_air_quality( uint16_t quality )
+void lcd_display_air_quality( uint16_t air_quality )
 {
+ //air quality step
+    if(0 == air_quality) //good  green      S11
+    {
+        g_Ht1621Tab[6]|= 0x80; 
+    }
+    else if(1 == air_quality) //mid yellow  S12
+    {
+        g_Ht1621Tab[6]|= 0x40;
+    }
+    else if(2 == air_quality) //high red    S13
+    {
+        g_Ht1621Tab[6]|= 0x20; 
+    }
+	    ht1621_write_one_data_4bits((u8)(6<<1),g_Ht1621Tab[6]);
+    ht1621_write_one_data_4bits((u8)(6<<1 + 1),(u8)(g_Ht1621Tab[6]>>4));
 }
 
 

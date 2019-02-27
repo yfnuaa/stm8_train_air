@@ -11,7 +11,12 @@
 #define  _PM25_H___
 
 #include "stm8s.h"
-
+enum pm25_dusty_servrity
+{
+    e_pm25_good = 140,
+    e_pm25_mid  = 380,
+    e_pm25_bad  = 580
+};
 #define PM25_ALARM_VALUE  	250
 
 extern uint8_t g_pm25_is_power_on;

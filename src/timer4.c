@@ -12,8 +12,8 @@
 #define TIMER4_C    1
 #include "timer4.h"
 
-uint8_t g_time4_280us_ok = 0;
-uint8_t g_time4_40us_ok = 0;
+volatile uint8_t g_time4_280us_ok = 0;
+volatile uint8_t g_time4_40us_ok = 0;
 
 enum time4_start_mode g_time4_start_mode = e_mode_null;
 
@@ -31,7 +31,6 @@ void timer4_isr(void)
         g_time4_start_mode = e_mode_null;
         //print("timer4_isr_40");
     }
-    
     //GPIO_WriteReverse(GPIOB, GPIO_PIN_5);
     TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
     TIM4_Cmd(DISABLE);  
@@ -45,9 +44,13 @@ void timer4_start_280us(void)
     g_time4_start_mode = e_mode_280_us;
     g_time4_280us_ok = 0;
 
-    TIM4_Cmd(DISABLE);  
+    //TIM4_Cmd(DISABLE);  
     TIM4_DeInit();  
-    TIM4_TimeBaseInit(TIM4_PRESCALER_4, 50);     //2M     142
+		#ifdef USE_DEFAULT_CLK_2M
+    TIM4_TimeBaseInit(TIM4_PRESCALER_4, 140);      //2M     140
+		#else
+		TIM4_TimeBaseInit(TIM4_PRESCALER_32,140);      //16 M
+		#endif
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
     //TIM4_ARRPreloadConfig(ENABLE);    
     TIM4_Cmd(ENABLE);  
@@ -63,7 +66,11 @@ void timer4_start_40us(void)
 
     TIM4_Cmd(DISABLE);  
     TIM4_DeInit();  
+	  #ifdef USE_DEFAULT_CLK_2M
     TIM4_TimeBaseInit(TIM4_PRESCALER_2, 40);     //2M   
+		#else
+		TIM4_TimeBaseInit(TIM4_PRESCALER_16,40);   //???4,????16??.
+		#endif
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
     //TIM4_ARRPreloadConfig(ENABLE);    
     TIM4_Cmd(ENABLE);  

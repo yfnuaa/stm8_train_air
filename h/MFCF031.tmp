@@ -4,11 +4,11 @@
 
 enum pwm_motor_speed_step
 {
-    e_speed_off         = 0,
-    e_speed_low       = 24, // 1.2v is supposed the 600 speed 
-    e_speed_middle = 38,  // 1.9v is supposed the 950 speed 
-    e_speed_high     = 52, // 2.7v is the hightest speed allowed, 1200r/min
-    e_speed_full       = 60  // 2.7v is the hightest speed allowed, 1200r/min
+    e_speed_off    = 0,
+    e_speed_low    = 10,
+    e_speed_middle = 40,
+    e_speed_high   = 70,
+    e_speed_full   = 54  //2.7v is the highest fan speed about 1200r/min
 };
 
 #ifndef PWM_C
@@ -21,6 +21,6 @@ void pwm_set_duty(u8 duty);//0-100
 void pwm_stop(void);
 void pwm_set_motor_speed_up(void);
 void pwm_set_motor_speed_down(void);
-void pwm_set_motor_speed(u8 step);
+void pwm_set_motor_speed(enum pwm_motor_speed_step step);
  
 #endif

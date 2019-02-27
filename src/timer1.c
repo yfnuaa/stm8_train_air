@@ -40,7 +40,11 @@ void timer1_init(void)
 {  
     //TIM4CLK is set to 16 MHz,
     TIM1_DeInit();                      
-    TIM1_TimeBaseInit(15, TIM1_COUNTERMODE_UP, 2500, 0); //20ms
+		#ifdef USE_DEFAULT_CLK_2M
+    TIM1_TimeBaseInit(15, TIM1_COUNTERMODE_UP, 1250, 0); // 2M   2000000/16 = 125000   125 means 1ms  so 1250 means 10ms 
+		#else
+    TIM1_TimeBaseInit(15,TIM1_COUNTERMODE_UP,10000,0); // 16M  16M/16 = 1M  so 1000 means 1ms so 10000 means 10ms
+		#endif
     TIM1_ARRPreloadConfig(ENABLE); 
     TIM1_ITConfig(TIM1_IT_UPDATE, ENABLE);
     TIM1_Cmd(ENABLE);                   //使能计时器  
