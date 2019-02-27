@@ -21,10 +21,6 @@
 #define TOUCH_KEY_MINUS_PIN     GPIO_PIN_6    //-
 #define TOUCH_KEY_MODE_PIN      GPIO_PIN_7    //mode
 
-#define SHORT_PRESS_BEEP_ON_TIME    50       //ms
-
-#define LONG_PRESS_BEEP_ON_TIME    100       //ms
-
 #define TOUCH_KEY_ALL_PIN   ( GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6| GPIO_PIN_7 )
 
 uint8_t g_touch_key_power_pressed = 0;
@@ -166,10 +162,6 @@ void touch_key_Init(void)
 {
  
     GPIO_Init(TOUCH_KEY_PORT, TOUCH_KEY_ALL_PIN, GPIO_MODE_IN_FL_IT);
-    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_4, GPIO_MODE_IN_FL_IT);
-    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_5, GPIO_MODE_IN_FL_IT);
-    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_6, GPIO_MODE_IN_FL_IT);
-    //GPIO_Init(TOUCH_KEY_PORT, GPIO_PIN_7, GPIO_MODE_IN_FL_IT);
     EXTI_SetExtIntSensitivity(TOUCH_KEY_EXTI_PORT, EXTI_SENSITIVITY_RISE_ONLY);
 }
 

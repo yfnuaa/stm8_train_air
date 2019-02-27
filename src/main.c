@@ -15,6 +15,7 @@
 #include "timer1.h"
 #include "timer4.h"
 #include "utility.h"
+#include "beep.h"
 
 
 #define SYSTEM_SENSOR_DETECT_INTERVAL           2   // 2S
@@ -41,28 +42,32 @@ void read_serial_no(void)
 }
 
 //Def
+//PD_DDR     CR1      CR2
+//  0         0        0    float             input     pullup resistor is off
+//  0         1        0    pullup            input     pullup resistor is on 
+//  0         0        1    interrup float    input     pullup resistor is off 
+//  0         1        1    interrup pullup   input     pullup resistor is on 
+
+//  1         0        0    open-drain        output    pullup resistor is off 
+//  1         1        0    push-pull         output    pullup resistor is off    
+//  1         x        1    quick 10Mhz       output    pullup resistor is off  
 
 void main()
 {
     uint8_t i = 0;
-		#ifndef USE_DEFAULT_CLK_2M
+    #ifndef USE_DEFAULT_CLK_2M
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
-		#endif
+	#endif
+
     timer1_init();
     touch_key_Init();
-    uart1_init(); 
+    uart1_init();   
     adc1_init();
-    enableInterrupts(); 
-    #if 0
-    while(1)
-    {
-        print_u8("TTest --------------------------->  ", i++);
-        delay_ms(8000);
-    }
-    
-    #endif
+    enableInterrupts();
+ 
     beep_init(); 
+    beep_on_ms(POWER_ON_BEEP_ON_TIME);
     lcd_init();
     lcd_test();
  
