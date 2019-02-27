@@ -51,7 +51,7 @@ void main()
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
 		#endif
 
-    //touch_key_Init();
+    touch_key_Init();
     uart1_init(); 
     adc1_init();
 
@@ -65,7 +65,7 @@ void main()
     #endif
     beep_init(); 
     lcd_init();
-
+    lcd_test();
     #if 0
     enableInterrupts(); 
     timer4_start_280us();
@@ -85,12 +85,9 @@ void main()
      
     adc1_start();
     
-    print_enter();
-    print_enter();
+ 
     print("System Power On");
-    
-    print_enter();
-    print_enter();
+ 
 
     #if 0
     while( 1 )

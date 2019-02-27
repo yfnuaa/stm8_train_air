@@ -542,16 +542,16 @@ void lcd_test(void)
     {
         for(j=1;j<=0xFF;)
         { 
-	    if(j<=0x0F)
-	    {
+	          if(j<=0x0F)
+	          {
                 ht1621_write_one_data_4bits((u8)(i<<1),g_Ht1621Tab[i]);
             }
             else
-	    {
+            {
                 ht1621_write_one_data_4bits((u8)(i<<1 + 1),(u8)(g_Ht1621Tab[i]>>4));
             }
             j=j<<1+1;
-            
+            _Nop;_Nop;_Nop;_Nop;_Nop;_Nop;_Nop;_Nop;_Nop;
         }
         i++;
     }
