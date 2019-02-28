@@ -77,7 +77,7 @@ void main()
     
  
  
-    print("System Power On");
+    print("System Power Onx");
  
 
     #if 1
@@ -86,10 +86,12 @@ void main()
       //  adc1_start();x
  
         pm25_led_on();
+        pm25_power_off();
         delay_280us();
         
         delay_40us();
         pm25_led_off();
+        pm25_power_on();
         delay_ms(100);
     }
     #endif

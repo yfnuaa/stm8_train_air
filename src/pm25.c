@@ -101,7 +101,10 @@ void pm25_init(void)
     PM25_LED_PORT->DDR |= PM25_LED_PIN;    
     PM25_LED_PORT->CR1 |= PM25_LED_PIN;    
     PM25_LED_PORT->CR2 |= PM25_LED_PIN; //&=(u8)( ~(PM25_LED_PIN));  
-
+    PM25_POWER_PORT->DDR |= PM25_POWER_PIN;    
+    PM25_POWER_PORT->CR1 |= PM25_POWER_PIN;    
+    PM25_POWER_PORT->CR2  &=(u8)( ~(PM25_POWER_PIN));  
+    pm25_power_off();
     pm25_led_off();
 }
 
