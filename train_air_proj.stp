@@ -61,7 +61,7 @@ String.100.2=STM8 Cosmic
 String.100.3=ST7 Metrowerks V1.1
 String.100.4=Raisonance
 String.101.0=STM8 Cosmic
-String.102.0=
+String.102.0=C:\Program Files (x86)\STMicroelectronics\st_toolset\stvd
 String.103.0=
 String.104.0=Hstm8
 String.105.0=Lib
@@ -144,7 +144,7 @@ String.100.2=STM8 Cosmic
 String.100.3=ST7 Metrowerks V1.1
 String.100.4=Raisonance
 String.101.0=STM8 Cosmic
-String.102.0=
+String.102.0=C:\Program Files (x86)\STMicroelectronics\st_toolset\stvd
 String.103.0=
 String.104.0=Hstm8
 String.105.0=Lib
@@ -399,7 +399,7 @@ PathName=stm8s_stdperiph_driver\src\stm8s_uart1.c
 [Root.Source Files]
 ElemType=Folder
 PathName=Source Files
-Child=Root.Source Files.stm8_interrupt_vector.c
+Child=Root.Source Files.src\adc.c
 Next=Root.Include Files
 Config.0=Root.Source Files.Config.0
 Config.1=Root.Source Files.Config.1
@@ -470,6 +470,11 @@ String.4.0=
 String.5.0=
 String.6.0=2019,1,30,22,11,59
 
+[Root.Source Files.src\adc.c]
+ElemType=File
+PathName=src\adc.c
+Next=Root.Source Files.stm8_interrupt_vector.c
+
 [Root.Source Files.stm8_interrupt_vector.c]
 ElemType=File
 PathName=stm8_interrupt_vector.c
@@ -498,11 +503,6 @@ Next=Root.Source Files.src\beep.c
 [Root.Source Files.src\beep.c]
 ElemType=File
 PathName=src\beep.c
-Next=Root.Source Files.src\adc1.c
-
-[Root.Source Files.src\adc1.c]
-ElemType=File
-PathName=src\adc1.c
 Next=Root.Source Files.src\pm25.c
 
 [Root.Source Files.src\pm25.c]
@@ -537,7 +537,7 @@ PathName=src\utility.c
 [Root.Include Files]
 ElemType=Folder
 PathName=Include Files
-Child=Root.Include Files.h\touch_key.h
+Child=Root.Include Files.h\adc.h
 Config.0=Root.Include Files.Config.0
 Config.1=Root.Include Files.Config.1
 
@@ -607,6 +607,11 @@ String.4.0=
 String.5.0=
 String.6.0=2019,1,30,22,11,59
 
+[Root.Include Files.h\adc.h]
+ElemType=File
+PathName=h\adc.h
+Next=Root.Include Files.h\touch_key.h
+
 [Root.Include Files.h\touch_key.h]
 ElemType=File
 PathName=h\touch_key.h
@@ -630,11 +635,6 @@ Next=Root.Include Files.h\beep.h
 [Root.Include Files.h\beep.h]
 ElemType=File
 PathName=h\beep.h
-Next=Root.Include Files.h\adc1.h
-
-[Root.Include Files.h\adc1.h]
-ElemType=File
-PathName=h\adc1.h
 Next=Root.Include Files.h\co2.h
 
 [Root.Include Files.h\co2.h]

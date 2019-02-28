@@ -152,11 +152,14 @@ u8 g_Ht1621Tab[]={0x00,0x00,0x00,0x00,
                   //ADD0[ D0   D1   D2   D3   D0    D1   D2    D3 ]
                   //ADD2[ D0   D1   D2   D3   D4    D5   D6    D7 ]
                   //ADD4[ D0   D1   D2   D3   D4    D5   D6    D7 ]                  
-               
+/*            
+     com0 com1 com2   com3  |ADDr
+seg0  D4   D5    D6     D7  | 0
+seg1  D0   D1    D2     D3  | 1
                   
                   
-/*
-     com0 com1 com2 com3    |ADDr
+
+     com0 com1 com2   com3  |ADDr
 seg0  D0   D1    D2     D3  | 0
 seg1  D0   D1    D2     S3  | 1
 
@@ -181,115 +184,46 @@ seg31                       | 31
 */                        
 void ht1621_light_up_always_on_seg(void)
 {
-    g_Ht1621Tab[0]|= 0x01;ht1621_write_one_data_4bits((u8)(0), g_Ht1621Tab[0]);//S3
-    g_Ht1621Tab[1]|= 0x01;ht1621_write_one_data_4bits((u8)(1), g_Ht1621Tab[1]);//S4
-    g_Ht1621Tab[4]|= 0x01;ht1621_write_one_data_4bits((u8)(4), g_Ht1621Tab[4]);//S9
-    g_Ht1621Tab[5]|= 0x01;ht1621_write_one_data_4bits((u8)(5), g_Ht1621Tab[5]);//S2
-    g_Ht1621Tab[2]|= 0x01;ht1621_write_one_data_4bits((u8)(2), g_Ht1621Tab[2]);//S1
+    g_Ht1621Tab[0]|= 0x01;ht1621_write_one_data_4bits((u8)(1),  g_Ht1621Tab[0]);//S3  key power
+    g_Ht1621Tab[1]|= 0x01;ht1621_write_one_data_4bits((u8)(3 ), g_Ht1621Tab[1]);//S4  key sub
+    g_Ht1621Tab[4]|= 0x01;ht1621_write_one_data_4bits((u8)(9 ), g_Ht1621Tab[4]);//S9  key mode
+    g_Ht1621Tab[5]|= 0x01;ht1621_write_one_data_4bits((u8)(11), g_Ht1621Tab[5]);//S2  key plus
+    g_Ht1621Tab[2]|= 0x01;ht1621_write_one_data_4bits((u8)(5 ), g_Ht1621Tab[2]);//S1  PM2.5 && CO2 icon
     
-    g_Ht1621Tab[6]|= 0x0F;ht1621_write_one_data_4bits((u8)(6), g_Ht1621Tab[6]);//S5
-    //g_Ht1621Tab[3]|= 0x01;//S6
-    //g_Ht1621Tab[3]|= 0x01;//S7
-    //g_Ht1621Tab[3]|= 0x01;//S8
-    g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(7 + 1), (u8)(g_Ht1621Tab[7]>>4));//S10
- 
+    g_Ht1621Tab[6]|= 0x01;ht1621_write_one_data_4bits((u8)(13), g_Ht1621Tab[6]);//S5   air quality index
+    g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(14), (u8)(g_Ht1621Tab[7]>>4));//S10  Fan step index
+    
+    g_Ht1621Tab[3]|= 0x1;ht1621_write_one_data_4bits((u8)(7), (u8)(g_Ht1621Tab[7]>>4));//S17   dan wei step index
 }           
  void ht1621_fill_digital_code(u8 di, u8 temp)
 {
+    g_Ht1621Tab[di] &=(u8)(~0xFE);
     if(temp&0x1)
         g_Ht1621Tab[di]|= 0x8;
-    else
-        g_Ht1621Tab[di]&=(u8)~0x8;
+
     if(temp&0x2)
         g_Ht1621Tab[di]|= 0x4;
-    else
-        g_Ht1621Tab[di]&=(u8)~0x4;
+
     if(temp&0x4)
         g_Ht1621Tab[di]|= 0x2;
-    else
-        g_Ht1621Tab[di]&=(u8)~0x2;
+
     if(temp&0x8)
         g_Ht1621Tab[di]|= 0x10;
-    else
-        g_Ht1621Tab[di]&=(u8)~0x10;
+  
     if(temp&0x10)
         g_Ht1621Tab[di]|= 0x20;
-    else
-        g_Ht1621Tab[di]&=(u8)~0x20;
+
     if(temp&0x20)
-        g_Ht1621Tab[di]|= 0x80;
-    else 
-        g_Ht1621Tab[di]&=(u8)~0x80;
-    if(temp&0x40)
         g_Ht1621Tab[di]|= 0x40;
-    else
-        g_Ht1621Tab[di]&=(u8)~0x40; 
-    ht1621_write_one_data_4bits((u8)(di), g_Ht1621Tab[di]);
-    ht1621_write_one_data_4bits((u8)(di+ 1), (u8)(g_Ht1621Tab[di]>>4));
+
+    if(temp&0x40)
+        g_Ht1621Tab[di]|= 0x80;
+
+    ht1621_write_all_data((u8)(di*2), g_Ht1621Tab+di,1);
+   
 }
 
- 
-void lcd_update_indicate_progress(uint16_t pm25, uint16_t c02, u8 fan_sept, u8 air_quality)
-{   //S2  S3  S4  S9 S17  alawys on
-    //PM25 value
-    u8 temp=0;
-    temp = (u8)(pm25%100);
-    pm25/=100;
-    temp = DIG_CODE[temp]; //led digital 1  hundred dig
-    ht1621_fill_digital_code(2, temp);
-    
-    temp = (u8)(pm25%10);
-    pm25/=10;
-    temp = DIG_CODE[temp]; //led digital 2   ten dig
-    ht1621_fill_digital_code(3, temp);
-     
-    temp = DIG_CODE[pm25]; //led digital 3   ten dig
-    ht1621_fill_digital_code(4, temp);
-//CO2 value
-    temp = (u8)(c02%100);
-    c02/=100;
-    temp = DIG_CODE[temp]; //led digital 4  C02 hundred dig
-    ht1621_fill_digital_code(5, temp);
-    
-    temp = (u8)(c02%10);
-    c02/=10;
-    temp = DIG_CODE[temp]; //led digital 5   ten dig
-    ht1621_fill_digital_code(0, temp);
-     
-    temp = DIG_CODE[c02];  //led digital 6   ten dig
-    ht1621_fill_digital_code(1, temp);
-    //fan step
-    if(0 == fan_sept)
-    {
-          g_Ht1621Tab[7]|= 0x10;       
-    }
-    else if(1 == fan_sept)                //S14
-    {
-          g_Ht1621Tab[7]|= 0x90; 
-    }
-    else if(2 == fan_sept)                //S15
-    {
-          g_Ht1621Tab[7]|= 0x50; 
-    }
-    else if(3 == fan_sept)                 //S16
-    {
-          g_Ht1621Tab[7]|= 0x30; 
-    }
-    //air quality step
-    if(0 == air_quality) //good  green      S11
-    {
-        g_Ht1621Tab[6]|= 0x80; 
-    }
-    else if(1 == air_quality) //mid yellow  S12
-    {
-        g_Ht1621Tab[6]|= 0x40;
-    }
-    else if(2 == air_quality) //high red    S13
-    {
-        g_Ht1621Tab[6]|= 0x20; 
-    }
-    
-}   
+  
 
 
 /********************************************************
@@ -378,14 +312,14 @@ void lcd_clear_screen(void)
 void lcd_display_pm25( uint16_t pm25 )
 {
   //PM25 value
-    u8 temp=0;
-    temp = (u8)(pm25%100);
-    pm25/=100;
+    u8 temp=0; 
+    temp = (u8)(pm25/100);
+    pm25%=100;
     temp = DIG_CODE[temp]; //led digital 1  hundred dig
     ht1621_fill_digital_code(2, temp);
     
-    temp = (u8)(pm25%10);
-    pm25/=10;
+    temp = (u8)(pm25/10);
+    pm25%=10;
     temp = DIG_CODE[temp]; //led digital 2   ten dig
     ht1621_fill_digital_code(3, temp);
      
@@ -397,13 +331,13 @@ void lcd_display_pm25( uint16_t pm25 )
 void lcd_display_co2( uint16_t c02 )
 {//CO2 value
     u8 temp=0;
-    temp = (u8)(c02%100);
-    c02/=100;
+    temp = (u8)(c02/100);
+    c02%=100;
     temp = DIG_CODE[temp]; //led digital 4  C02 hundred dig
     ht1621_fill_digital_code(5, temp);
     
-    temp = (u8)(c02%10);
-    c02/=10;
+    temp = (u8)(c02/10);
+    c02%=10;
     temp = DIG_CODE[temp]; //led digital 5   ten dig
     ht1621_fill_digital_code(0, temp);
      
@@ -429,35 +363,45 @@ void lcd_display_co2( uint16_t c02 )
           g_Ht1621Tab[7]|= 0x30; 
     }
 #endif
+void lcd_light_mode_manual(void)
+{    
+    g_Ht1621Tab[6]|= 0x02; ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[0]); //S6     //manual icon
+}
+void lcd_light_mode_auto(void)
+{
+    g_Ht1621Tab[6]|= 0x04;ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[0]); //S7     //automocit icon
+}
+void lcd_light_mode_sleep(void)
+{
+    g_Ht1621Tab[6]|= 0x08;ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[0]); //S8     //sleep mode icon
+}
+
+
 void lcd_display_fan_speed( u8 step)
 {
     if(step == 0)
     { 
-        g_Ht1621Tab[7]|= 0x10;    
-	      g_Ht1621Tab[7]&= (u8)(~0x90);
-        g_Ht1621Tab[7]&= (u8)(~0x50); 
-	      g_Ht1621Tab[7]&= (u8)(~0x30); 
+        //g_Ht1621Tab[7]|= 0x10;    
+	    g_Ht1621Tab[7]&= (u8)(~0xE0);
+ 
     }
     else if(step<=e_speed_low)
     {
-        g_Ht1621Tab[7]|= 0x90; 
-        g_Ht1621Tab[7]&= (u8)(~0x50); 
-	      g_Ht1621Tab[7]&= (u8)(~0x30); 	
+        g_Ht1621Tab[7]&= (u8)(~0x60);
+  	    g_Ht1621Tab[7]|= 0x80; 
     }
     else if(step<=e_speed_middle)
     {
-        g_Ht1621Tab[7]|= 0x90; 
-        g_Ht1621Tab[7]|= 0x50; 
-        g_Ht1621Tab[7]&= (u8)(~0x30); 		
+        g_Ht1621Tab[7]&= (u8)(~0x20);
+        g_Ht1621Tab[7]|= 0xC0; 	
     }
     else //if(step<=e_speed_high)
     {
-        g_Ht1621Tab[7]|= 0x90; 
-        g_Ht1621Tab[7]|= 0x50; 
-        g_Ht1621Tab[7]|= 0x30; 
+ 
+        g_Ht1621Tab[7]|= 0xE0; 	
     }
     //ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
-    ht1621_write_one_data_4bits((u8)(7 + 1),(u8)(g_Ht1621Tab[7]>>4));
+    ht1621_write_one_data_4bits((u8)(14 ),(u8)(g_Ht1621Tab[7]>>4));
 #if 0
     switch( step )
      {
@@ -482,24 +426,17 @@ void lcd_display_air_quality( uint16_t air_quality )
  //air quality step
     if(0 == air_quality) //good  green      S11
     {
-        g_Ht1621Tab[6]|= 0x80; 
-        g_Ht1621Tab[6]&= (u8)(~0x40);
-        g_Ht1621Tab[6]&= (u8)(~0x20); 
+        ht1621_write_one_data_4bits(12,8);
     }
     else if(1 == air_quality) //mid yellow  S12
     {
-        g_Ht1621Tab[6]|= 0x40;
-	g_Ht1621Tab[6]&= (u8)(~0x80);
-        g_Ht1621Tab[6]&= (u8)(~0x20); 	
+        ht1621_write_one_data_4bits(12,0x4);	
     }
     else if(2 == air_quality) //high red    S13
     {
-        g_Ht1621Tab[6]|= 0x20; 
-        g_Ht1621Tab[6]&= (u8)(~0x40);
-        g_Ht1621Tab[6]&= (u8)(~0x80); 	
+        ht1621_write_one_data_4bits(12,2);
     }
-    //ht1621_write_one_data_4bits((u8)(6),g_Ht1621Tab[6]);
-    ht1621_write_one_data_4bits((u8)(6 + 1),(u8)(g_Ht1621Tab[6]>>4));
+ 
 }
 
 
@@ -534,26 +471,50 @@ void lcd_init(void)
     lcd_back_light_on();
 }
 void lcd_test(void)
-{
-    unsigned int i,j;
+{   u8 i;
+    u16 j;
     u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-    ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
-    for(i=0;i<=15;i++)    
+   // u8 Ht1621Tab[]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+     ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
+   // ht1621_write_one_data_4bits(1,1);
+    //return;
+    for(i=0;i<=7;i++)    
     {
-        for(j=1;j<=0xFF;)
+        for(j=1;j<=0xFF;j=j)
         { 
-	          if(j<=0x0F)
-	          {
-                ht1621_write_one_data_4bits((u8)(i),Ht1621Tab[i]);
-            }
-            else
-            {
-                ht1621_write_one_data_4bits((u8)(i + 1),(u8)(Ht1621Tab[i]>>4));
-            }
-            j=j<<1+1;
-            delay_ms(10);
+             
+            ht1621_write_one_data_4bits(i*2,(u8)(j));
+            ht1621_write_one_data_4bits(i*2+1,(u8)(j>>4));
+            j=(j<<1)+1;
+            delay_ms(30);
         }
-        i++;
+        
     }
+    ht1621_write_all_data(0,Ht1621Tab,8);
+    delay_ms(300);
+    
+    lcd_light_mode_manual();
+    lcd_light_mode_auto();
+    lcd_light_mode_sleep();
+    
+    
+    
+    ht1621_light_up_always_on_seg();
+    
+    lcd_display_air_quality(0);
+    lcd_display_fan_speed(0); 
+    delay_ms(300);
+    lcd_display_air_quality(1);
+    lcd_display_fan_speed(e_speed_low);
+    delay_ms(300);
+    lcd_display_air_quality(2);
+    lcd_display_fan_speed(e_speed_middle);
+    delay_ms(300);
+    lcd_display_fan_speed(e_speed_high);
+   // for(i=0;i<999;i++)
+{lcd_display_pm25(888);delay_ms(100);}
+    //    for(i=0;i<999;i++)
+   { lcd_display_co2(888);delay_ms(100);}
+    
 }
 

@@ -18,6 +18,7 @@
 
 #define PM25_LED_PORT           GPIOC       //Need Check
 #define PM25_LED_PIN            GPIO_PIN_3
+uint16_t g_adc1_pm25_ad_value;     //mv    --> Channel AIN3
 
 uint8_t g_pm25_is_power_on = 0;
 uint8_t g_pm25_is_led_on = 0;

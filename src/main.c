@@ -10,7 +10,7 @@
 #include "beep.h"
 #include "lcd.h"
 #include "pwm.h"
-#include "adc1.h"
+#include "adc.h"
 #include "debug.h"
 #include "timer1.h"
 #include "timer4.h"
@@ -59,40 +59,43 @@ void main()
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
 	#endif
-    
+    beep_init(); lcd_tone_off();
+    uart1_init();    
     lcd_init();
     lcd_test();
     touch_key_Init();
-    uart1_init();   
-    adc1_init();
+   
+ 
     enableInterrupts();
     timer1_init();
-    beep_init(); 
+
     beep_on_ms(POWER_ON_BEEP_ON_TIME);
  
  
     
     pwm_init();
     pm25_init();
-    
+    co2_init();
  
  
-    print("System Power Onx");
+    print("PO");
  
 
     #if 1
     while( 1 )
     {
       //  adc1_start();x
- 
+        ADC1_C4_Init();
         pm25_led_on();
         pm25_power_off();
+        co2_power_off();
         delay_280us();
         
         delay_40us();
         pm25_led_off();
         pm25_power_on();
-        delay_ms(100);
+        co2_power_on();
+        delay_ms(3000);
     }
     #endif
     
@@ -108,7 +111,7 @@ void main()
         //timer4_start_280us();
         delay_280us();
         //while(g_time4_280us_ok != 0);
-        adc1_start();
+     
         
         //timer4_start_40us();
         //while(g_time4_40us_ok != 0);
@@ -144,13 +147,13 @@ void main()
             }
             //ADC start
             //adc1_start();
-            while( g_adc1_is_ok == 1 );
+            while( g_adc_finished);
             
             if( g_pm25_need_detect )    
             {
                 pm25_set_detect_end();
             }
-
+             g_adc1_pm25_ad_value = g_ad_value;
             //PM2.5 º∆À„
             if( g_pm25_is_power_on && g_pm25_need_detect )
             {

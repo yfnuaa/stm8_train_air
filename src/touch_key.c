@@ -99,10 +99,10 @@ void touch_key_power_long_press(void)
 void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
- 
+      print("Key isr");
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
-        print("Key Press:   Power");
+        print("Key[ Power]");
          
         g_touch_key_power_pressed = 1;
         g_touch_long_press_count=1;
@@ -111,21 +111,21 @@ void touch_key_gpio_isr(void)
 
     if( (value & TOUCH_KEY_MODE_PIN) != 0)
     {
-        print("Key Press:   Mode");
+        print("Key[ Mode]");
         print_enter();
         touch_key_mode_press();
     }
 
     if( (value & TOUCH_KEY_MINUS_PIN) != 0)
     {
-        print("Key Press:   ----");
+        print("Key[----]");
         print_enter();
         touch_key_minus_press();
     }
 
     if( (value & TOUCH_KEY_PLUS_PIN) != 0)
     {
-        print("Key Press:   ++++");
+        print("Key[++++]");
         print_enter();
         touch_key_plus_press();
     }
