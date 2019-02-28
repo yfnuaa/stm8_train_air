@@ -72,25 +72,25 @@ void main()
  
  
     
-   // pwm_init();
-   // pm25_init();
+    pwm_init();
+    pm25_init();
     
  
  
     print("System Power On");
  
 
-    #if 0
+    #if 1
     while( 1 )
     {
-      //  adc1_start();
+      //  adc1_start();x
  
         pm25_led_on();
         delay_280us();
-        pm25_led_off();
+        
         delay_40us();
- 
-        delay_ms(1000);
+        pm25_led_off();
+        delay_ms(100);
     }
     #endif
     
