@@ -97,8 +97,10 @@ void touch_key_power_long_press(void)
         case e_power_off_mode:
             lcd_back_light_on();
             g_system_mode = e_auto_mode;
+			
             g_one_time_collect_timers = 0;        //goto adc collect immediately
             g_system_sensor_detect_timer_flag = 0;//goto adc collect immediately
+			
             co2_power_on();
 		    beep_on_ms(POWER_ON_BEEP_ON_TIME);
             print("Switch --> Auto Mode");
