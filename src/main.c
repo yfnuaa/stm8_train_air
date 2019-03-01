@@ -61,7 +61,7 @@ void main()
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
     #endif
-    g_system_sensor_detect_timer_flag = 0; ;
+    g_system_sensor_detect_timer_flag = 0; 
 	
 	// beep and lcd
     beep_init(); lcd_tone_off();

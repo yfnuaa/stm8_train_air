@@ -89,7 +89,7 @@ void touch_key_power_long_press(void)
             co2_power_off();
             adc1_reset();
             lcd_off();
-			beep_derect_off();
+            beep_derect_off();
             g_system_mode = e_power_off_mode;
             print("Switch --> Off Mode");
             break;
@@ -116,7 +116,7 @@ void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
     print("Key isr");
-        touch_key_DeInit();
+    touch_key_DeInit();
         
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
@@ -142,6 +142,8 @@ void touch_key_gpio_isr(void)
         print("Key[++++]");
         touch_key_plus_press();
     }
+		g_10ms_delay_count = 10;
+		timer4_start();
 }
 
 

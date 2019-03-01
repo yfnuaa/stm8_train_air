@@ -78,18 +78,17 @@ void timer4_start_40us(void)
 }
 #endif
 static volatile u16 g_10ms_delay_count = 0;
-void timer4_isr(void)
+void timer4_isr(void)  // 1ms timer
 {
-      
-      if(g_10ms_delay_count)
+    if(g_10ms_delay_count)
     {
         g_10ms_delay_count --;
-        }
-        else
-        {
-               touch_key_Init();
-               TIM4_Cmd(DISABLE); 
-        }
+    }
+    else
+    {
+        touch_key_Init();
+        TIM4_Cmd(DISABLE); 
+    }
          
     TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
 }
@@ -107,7 +106,7 @@ void timer4_init()
 }
 void timer4_start()
 {
-      if(g_10ms_delay_count) return;
+    if(g_10ms_delay_count) return;
     g_10ms_delay_count = 0;
     TIM4_Cmd(ENABLE);  
 }

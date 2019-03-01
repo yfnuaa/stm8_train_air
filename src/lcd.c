@@ -285,7 +285,7 @@ void lcd_off(void)
     ht1621_write_command(LCDOFF);
     lcd_back_light_off();
 }
- #if 0
+#if 0
 void lcd_update_memory_loop(void)
 {
     u8 i,j;
