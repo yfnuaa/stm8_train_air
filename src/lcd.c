@@ -214,10 +214,10 @@ void ht1621_light_up_always_on_seg(void)
         g_Ht1621Tab[di]|= 0x20;
 
     if(temp&0x20)
-        g_Ht1621Tab[di]|= 0x40;
+        g_Ht1621Tab[di]|= 0x80;
 
     if(temp&0x40)
-        g_Ht1621Tab[di]|= 0x80;
+        g_Ht1621Tab[di]|= 0x40;
 
     ht1621_write_all_data((u8)(di*2), g_Ht1621Tab+di,1);
 }
@@ -317,6 +317,7 @@ void lcd_display_pm25( uint16_t pm25 )
   //PM25 value
     u8 temp=0; 
     temp = (u8)(pm25/100);
+ print_u16("pm25",temp);
     pm25%=100;
     temp = DIG_CODE[temp]; //led digital 1  hundred dig
     ht1621_fill_digital_code(2, temp);
@@ -335,6 +336,7 @@ void lcd_display_co2( uint16_t c02 )
 {//CO2 value
     u8 temp=0;
     temp = (u8)(c02/100);
+    print_u16("co2",temp);
     c02%=100;
     temp = DIG_CODE[temp]; //led digital 4  C02 hundred dig
     ht1621_fill_digital_code(5, temp);
@@ -516,9 +518,9 @@ void lcd_test(void)
     delay_ms(300);
     lcd_display_fan_speed(e_speed_high);
     // for(i=0;i<999;i++)
-    {   lcd_display_pm25(888);delay_ms(100);}
+    {   lcd_display_pm25(000);delay_ms(100);}
     //    for(i=0;i<999;i++)
-    { lcd_display_co2(888);delay_ms(100);}
+    { lcd_display_co2(000);delay_ms(100);}
     
 }
 

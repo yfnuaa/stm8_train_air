@@ -116,13 +116,13 @@ extern volatile u16 g_10ms_delay_count;
 
 
 #ifdef RUIZHU_TEST
-int8_t g_test_speed = 0;
+int16_t g_test_speed = 0;
 #endif
 void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
     print("Key isr");
-    touch_key_DeInit();// stop key interrupt
+    //touch_key_DeInit();// stop key interrupt
         
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
@@ -166,8 +166,8 @@ void touch_key_gpio_isr(void)
         touch_key_plus_press();
         #endif
     }
-	g_10ms_delay_count = 10;
-    timer4_start();
+	//g_10ms_delay_count = 10;
+    // timer4_start();
 }
 
 

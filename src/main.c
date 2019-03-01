@@ -62,10 +62,11 @@ void main()
     g_system_sensor_detect_timer_flag = 0; 
 	
 	// beep and lcd
+    uart1_init(); 
     lcd_init();
     lcd_test();
     beep_init(); 
-    uart1_init();    
+   
 
 	
 	// touch key
