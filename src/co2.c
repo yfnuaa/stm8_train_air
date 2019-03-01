@@ -19,21 +19,31 @@ uint8_t g_co2_need_detect = 0;
 
 uint16_t g_co2_density = 0;
 /*
-X = M*C/22.4
-C = 22.4*X/M
-X = 44ug/m3
-C = PPM
+X = M*ppm/22.4
+ppm = 22.4*X/M
+X = 44mg/m3
+ 
 M = molecular weight  CO2 = 44
+
+ppm=£¨22.4¡Ámg/m3£©/·Ö×ÓÁ¿
 */
-  
+/*
+340mv - 285mv 
+ppm = (mv - 284)*();
+284 - 257mv
+
+256mv - 0
+
+
+*/
 void co2_calculate_density(uint16_t mv)
 {  
     //u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1023)/10;  // unit mv
     //u16 calcVoltage =  g_adc1_pm25_ad_value * (500 / 1023);  // unit mv
     u16 calcVoltage = (u16)( g_adc1_co2_ad_value * 0.488769);  // unit mv
     u16 co2ppm = calcVoltage; 
-    //g_co2_density =(u16)( 44* co2ppm / 22.4); //  ug/m3
-    g_co2_density =(u16)( 1.9643 * co2ppm)/1000;  //unit  mg/m3
+    //g_co2_density =(u16)( 44* co2ppm / 22.4); //  mg/m3
+    g_co2_density = (g_co2_density+(u16)( 1.9643 * co2ppm))>>1;  //unit  mg/m3
 }
 
 void co2_power_on()
