@@ -475,24 +475,25 @@ void lcd_init(void)
 void lcd_test(void)
 {   u8 i;
     u16 j;
-    u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-   // u8 Ht1621Tab[]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
-     ht1621_write_all_data(0,Ht1621Tab,8); //清除1621寄存器数据，暨清屏
-   // ht1621_write_one_data_4bits(1,1);
+    //u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+    // u8 Ht1621Tab[]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
+		ht1621_write_all_data(0,g_Ht1621Tab,8); //清除1621寄存器数据，暨清屏
+    // ht1621_write_one_data_4bits(1,1);
     //return;
     for(i=0;i<=7;i++)    
     {
         for(j=1;j<=0xFF;j=j)
         { 
-             
-            ht1621_write_one_data_4bits(i*2,(u8)(j));
-            ht1621_write_one_data_4bits(i*2+1,(u8)(j>>4));
+						u8 temp;
+						temp = (u8)(j);
+            ht1621_write_one_data_4bits((u8)(i*2),temp);
+						temp = (u8)(temp>>4);
+            ht1621_write_one_data_4bits((u8)(i*2+1),temp);
             j=(j<<1)+1;
             delay_ms(30);
         }
-        
     }
-    ht1621_write_all_data(0,Ht1621Tab,8);
+    ht1621_write_all_data(0,g_Ht1621Tab,8);
     delay_ms(300);
     
     lcd_light_mode_manual();
