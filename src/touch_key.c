@@ -85,22 +85,22 @@ void touch_key_power_long_press(void)
     {
         case e_auto_mode:
         case e_manual_mode: 
-                case e_sleep_mode:
-                    co2_power_off();
-                        adc1_reset();
-                        lcd_back_light_off();
+        case e_sleep_mode:
+            co2_power_off();
+            adc1_reset();
+            lcd_back_light_off();
+			beep_derect_off();
             g_system_mode = e_power_off_mode;
             print("Switch --> Off Mode");
             break;
             
         case e_power_off_mode:
-                    lcd_back_light_on();
+            lcd_back_light_on();
             g_system_mode = e_auto_mode;
-                        
-                        g_one_time_collect_timers = 0;        //goto adc collect immediately
-                        g_system_sensor_detect_timer_flag = 0;//goto adc collect immediately
-                        
-                        co2_power_on();
+            g_one_time_collect_timers = 0;        //goto adc collect immediately
+            g_system_sensor_detect_timer_flag = 0;//goto adc collect immediately
+            co2_power_on();
+		    beep_on_ms(POWER_ON_BEEP_ON_TIME);
             print("Switch --> Auto Mode");
             break;
                         

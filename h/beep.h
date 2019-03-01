@@ -30,5 +30,5 @@ void beep_init(void);
 /
 #endif
 void beep_on_ms(uint16_t ms);
-
+void beep_derect_off(void);
 #endif

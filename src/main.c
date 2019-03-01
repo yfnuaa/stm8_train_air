@@ -136,7 +136,6 @@ void main()
         {
             //Delay
             //delay_s(g_system_sensor_detect_timer_flag);
-                        
             if(0 == g_system_sensor_detect_timer_flag )//begin to collect ADC data
             { 
                 if(g_one_time_collect_timers<=10)
