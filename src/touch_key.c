@@ -55,13 +55,13 @@ void touch_key_mode_press(void)
     switch( g_system_mode )
     {
         case e_auto_mode:
-                    pwm_set_motor_speed(e_speed_middle);
+            pwm_set_motor_speed(e_speed_middle);
             g_system_mode = e_manual_mode;
             print("Switch --> Manual Mode");
             break;
             
         case e_manual_mode:
-                    pwm_set_motor_speed(e_speed_low);
+            pwm_set_motor_speed(e_speed_low);
             g_system_mode = e_sleep_mode;
             print("Switch --> Sleep Mode");
             break;
@@ -113,6 +113,11 @@ void touch_key_power_long_press(void)
 }
 
 extern volatile u16 g_10ms_delay_count;
+
+
+#ifdef RUIZHU_TEST
+u8 g_test_speed = 0;
+#endif
 void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
@@ -135,16 +140,34 @@ void touch_key_gpio_isr(void)
     if( (value & TOUCH_KEY_MINUS_PIN) != 0)
     {
         print("Key[----]");
+        #ifdef RUIZHU_TEST
+         beep_on_ms(SHORT_PRESS_BEEP_ON_TIME);
+        g_test_speed-=5;
+        if(g_test_speed<0) g_test_speed = 0;
+        pwm_set_motor_speed(g_test_speed);
+        lcd_display_pm25(g_test_speed);
+        #else 
+       
         touch_key_minus_press();
+        #endif
     }
 
     if( (value & TOUCH_KEY_PLUS_PIN) != 0)
     {
         print("Key[++++]");
+        #ifdef RUIZHU_TEST
+         beep_on_ms(SHORT_PRESS_BEEP_ON_TIME);
+        g_test_speed+=5;
+        if(g_test_speed>80) g_test_speed = 80;
+        pwm_set_motor_speed(g_test_speed);
+        lcd_display_pm25(g_test_speed);
+        #else 
+       
         touch_key_plus_press();
+        #endif
     }
-		g_10ms_delay_count = 10;
-		timer4_start();
+	g_10ms_delay_count = 10;
+    timer4_start();
 }
 
 

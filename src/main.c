@@ -85,9 +85,11 @@ void main()
     lcd_display_air_quality(0);
     lcd_display_fan_speed(0);
     print("PO");
-    #if 1
+    #ifdef  RUIZHU_TEST   // for  ruizu fan test
     while(1)
     {
+    
+    
     }
     #endif        
         

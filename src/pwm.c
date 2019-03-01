@@ -53,7 +53,7 @@ void pwm_set_motor_speed(u8 step)
         TIM2_SetCompare3(8*step); 
         #endif
         g_pwm_motor_speed_step = step;
-          lcd_display_fan_speed(g_pwm_motor_speed_step);
+        lcd_display_fan_speed(g_pwm_motor_speed_step);
     }
 }
 
