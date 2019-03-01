@@ -64,7 +64,7 @@ void main()
     g_system_sensor_detect_timer_flag = 0; 
 	
 	// beep and lcd
-    beep_init(); lcd_tone_off();
+    beep_init(); 
     uart1_init();    
     lcd_init();
     lcd_test();
@@ -80,15 +80,20 @@ void main()
  
     //senor and  motor
     pwm_init();
+    
+    #ifndef RUIZHU_TEST
     pm25_init();
     co2_init();
+    #endif
+    
+    
     lcd_display_air_quality(0);
     lcd_display_fan_speed(0);
     print("PO");
     #ifdef  RUIZHU_TEST   // for  ruizu fan test
     while(1)
     {
-    
+ 
     
     }
     #endif        

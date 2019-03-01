@@ -116,7 +116,7 @@ extern volatile u16 g_10ms_delay_count;
 
 
 #ifdef RUIZHU_TEST
-u8 g_test_speed = 0;
+int8_t g_test_speed = 0;
 #endif
 void touch_key_gpio_isr(void)
 {
