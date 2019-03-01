@@ -2,8 +2,7 @@
  * 
  * Copyright (c) 2002-2005 STMicroelectronics
  */
- #include "stm8s.h"
-#define  SYSTEM_C   1
+#include "stm8s.h"
 #include "system.h"
 #include "pm25.h"
 #include "co2.h"
