@@ -18,15 +18,19 @@ uint8_t g_co2_is_warm_up = 0;
 uint8_t g_co2_need_detect = 0;
 
 uint16_t g_co2_density = 0;
+/*
+X = M*C/22.4
+C = 22.4*X/M
+X = 44ug/m3
+C = PPM
+M = molecular weight  CO2 = 44
+*/
 
 void co2_calculate_density(uint16_t mv)
 {  
-    /* 
-    calcVoltage = voMeasured * (5.0 / 1024.0); //将模拟值转换为电压值
-    g_pm25_dust_density =(uint16_t)( 0.17 * calcVoltage - 0.1); //将电压值转换为粉尘密度输出单位
-    */
-    g_co2_density = 0;
-    
+    u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1024);
+	u16 co2ppm = ;
+    g_co2_density = 44* co2ppm / 22.4;
 }
 
 void co2_power_on()

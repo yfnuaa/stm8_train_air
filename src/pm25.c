@@ -42,7 +42,13 @@ void pm25_led_on(void)
     PM25_LED_PORT->ODR &= (uint8_t)(~PM25_LED_PIN);
     g_pm25_is_led_on = 1;
 }
-
+/*
+X = M*C/22.4
+C = 22.4*X/M
+X = 44ug/m3
+C = PPM
+M = molecular weight  CO2 = 44
+*/
 
 void pm25_calculate_density(uint16_t mv)
 {  
@@ -50,7 +56,8 @@ void pm25_calculate_density(uint16_t mv)
     calcVoltage = voMeasured * (5.0 / 1024.0); //将模拟值转换为电压值
     g_pm25_dust_density =(uint16_t)( 0.17 * calcVoltage - 0.1); //将电压值转换为粉尘密度输出单位
     */
-    g_pm25_dust_density = 0;
+	u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1024);
+    g_pm25_dust_density = (uint16_t)( 0.17 * calcVoltage - 0.1); //将电压值转换为粉尘密度输出单位
     
 }
 
