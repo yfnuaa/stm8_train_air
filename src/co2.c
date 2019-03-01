@@ -25,8 +25,10 @@ X = 44mg/m3
  
 M = molecular weight  CO2 = 44
 
-ppm=（22.4×mg/m3）/分子量
+ppm=（22.4×mg/m3）/m   分子量
 */
+
+
 /*
 340mv - 285mv 
 ppm = (mv - 284)*();
@@ -38,12 +40,12 @@ ppm = (mv - 284)*();
 */
 void co2_calculate_density(uint16_t mv)
 {  
-    //u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1023)/10;  // unit mv
-    //u16 calcVoltage =  g_adc1_pm25_ad_value * (500 / 1023);  // unit mv
-    u16 calcVoltage = (u16)( g_adc1_co2_ad_value * 0.488769);  // unit mv
+    //u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1023)/10;   // unit mv
+    //u16 calcVoltage =  g_adc1_pm25_ad_value * (500 / 1023);       // unit mv
+    u16 calcVoltage = (u16)( g_adc1_co2_ad_value * 0.488769);       // unit mv
     u16 co2ppm = calcVoltage; 
-    //g_co2_density =(u16)( 44* co2ppm / 22.4); //  mg/m3
-    g_co2_density = (g_co2_density+(u16)( 1.9643 * co2ppm))>>1;  //unit  mg/m3
+    //g_co2_density =(u16)( 44* co2ppm / 22.4);                     //  mg/m3
+    g_co2_density = (g_co2_density+(u16)( 1.9643 * co2ppm))>>1;     //unit  mg/m3
 }
 
 void co2_power_on()
