@@ -77,7 +77,7 @@ void timer4_start_40us(void)
     TIM4_Cmd(ENABLE);  
 }
 #endif
-static volatile u16 g_10ms_delay_count = 0;
+volatile u16 g_10ms_delay_count = 0;
 void timer4_isr(void)  // 1ms timer
 {
     if(g_10ms_delay_count)

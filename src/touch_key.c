@@ -15,6 +15,7 @@
 #include "co2.h"
 #include "adc.h"
 #include "lcd.h"
+#include "timer4.h"
 #define TOUCH_KEY_PORT          GPIOC   
 #define TOUCH_KEY_EXTI_PORT     EXTI_PORT_GPIOC
 
@@ -111,18 +112,18 @@ void touch_key_power_long_press(void)
     }
 }
 
-
+extern volatile u16 g_10ms_delay_count;
 void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
     print("Key isr");
-    touch_key_DeInit();
+    touch_key_DeInit();// stop key interrupt
         
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
         print("Key[ Power]");
         g_touch_key_power_pressed = 1;
-        g_touch_long_press_count=1;
+        g_touch_long_press_count = 1;
     }
 
     if( (value & TOUCH_KEY_MODE_PIN) != 0)
