@@ -82,13 +82,17 @@ void main()
  
  
     print("PO");
- 
+    #if 1
+    while(1)
+		{
+		}
+		#endif		
+		
 
     #if 1   //test ad and touch
     while( 1 )
     {
- 
-			  if(g_touch_power_long_pressed)
+ 			  if(g_touch_power_long_pressed)
 				{
 				    touch_key_power_long_press();
 						g_touch_power_long_pressed = RESET;
