@@ -47,11 +47,11 @@ void timer4_start_280us(void)
 
     //TIM4_Cmd(DISABLE);  
     TIM4_DeInit();  
-		#ifdef USE_DEFAULT_CLK_2M
+        #ifdef USE_DEFAULT_CLK_2M
     TIM4_TimeBaseInit(TIM4_PRESCALER_4, 140);      //2M     140
-		#else
-		TIM4_TimeBaseInit(TIM4_PRESCALER_32,140);      //16 M
-		#endif
+        #else
+        TIM4_TimeBaseInit(TIM4_PRESCALER_32,140);      //16 M
+        #endif
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
     //TIM4_ARRPreloadConfig(ENABLE);    
     TIM4_Cmd(ENABLE);  
@@ -67,11 +67,11 @@ void timer4_start_40us(void)
 
     TIM4_Cmd(DISABLE);  
     TIM4_DeInit();  
-	  #ifdef USE_DEFAULT_CLK_2M
+      #ifdef USE_DEFAULT_CLK_2M
     TIM4_TimeBaseInit(TIM4_PRESCALER_2, 40);     //2M   
-		#else
-		TIM4_TimeBaseInit(TIM4_PRESCALER_16,40);   //???4,????16??.
-		#endif
+        #else
+        TIM4_TimeBaseInit(TIM4_PRESCALER_16,40);   //???4,????16??.
+        #endif
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
     //TIM4_ARRPreloadConfig(ENABLE);    
     TIM4_Cmd(ENABLE);  
@@ -80,34 +80,34 @@ void timer4_start_40us(void)
 static volatile u16 g_10ms_delay_count = 0;
 void timer4_isr(void)
 {
-	  
-	  if(g_10ms_delay_count)
+      
+      if(g_10ms_delay_count)
     {
         g_10ms_delay_count --;
-		}
-		else
-		{
-			   touch_key_Init();
-			   TIM4_Cmd(DISABLE); 
-		}
-		 
+        }
+        else
+        {
+               touch_key_Init();
+               TIM4_Cmd(DISABLE); 
+        }
+         
     TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
 }
 void timer4_init()
 {
     TIM4_Cmd(DISABLE);  
     TIM4_DeInit();  
-	  #ifdef USE_DEFAULT_CLK_2M
+      #ifdef USE_DEFAULT_CLK_2M
     TIM4_TimeBaseInit(TIM4_PRESCALER_32,  63);     //16us each timer   16 * 63 = 1ms.   
-		#else
-		TIM4_TimeBaseInit(TIM4_PRESCALER_128, 0x7D);       //8 us each timer   8 * 125 = 1ms.   
-		#endif
+        #else
+        TIM4_TimeBaseInit(TIM4_PRESCALER_128, 0x7D);       //8 us each timer   8 * 125 = 1ms.   
+        #endif
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
     TIM4_ARRPreloadConfig(ENABLE);  
 }
 void timer4_start()
 {
-	  if(g_10ms_delay_count) return;
+      if(g_10ms_delay_count) return;
     g_10ms_delay_count = 0;
     TIM4_Cmd(ENABLE);  
 }

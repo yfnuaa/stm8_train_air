@@ -382,23 +382,23 @@ void lcd_display_fan_speed( u8 step)
     if(step == 0)
     { 
         //g_Ht1621Tab[7]|= 0x10;    
-	    g_Ht1621Tab[7]&= (u8)(~0xE0);
+        g_Ht1621Tab[7]&= (u8)(~0xE0);
  
     }
     else if(step<=e_speed_low)
     {
         g_Ht1621Tab[7]&= (u8)(~0x60);
-  	    g_Ht1621Tab[7]|= 0x80; 
+          g_Ht1621Tab[7]|= 0x80; 
     }
     else if(step<=e_speed_middle)
     {
         g_Ht1621Tab[7]&= (u8)(~0x20);
-        g_Ht1621Tab[7]|= 0xC0; 	
+        g_Ht1621Tab[7]|= 0xC0;     
     }
     else //if(step<=e_speed_high)
     {
  
-        g_Ht1621Tab[7]|= 0xE0; 	
+        g_Ht1621Tab[7]|= 0xE0;     
     }
     //ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
     ht1621_write_one_data_4bits((u8)(14 ),(u8)(g_Ht1621Tab[7]>>4));
@@ -430,7 +430,7 @@ void lcd_display_air_quality( uint16_t air_quality )
     }
     else if(1 == air_quality) //mid yellow  S12
     {
-        ht1621_write_one_data_4bits(12,0x4);	
+        ht1621_write_one_data_4bits(12,0x4);    
     }
     else if(2 == air_quality) //high red    S13
     {
@@ -446,8 +446,8 @@ void lcd_init(void)
     u8 i = 0;
     
     //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_LOW_FAST);
-	//GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_OD_LOW_FAST);
-	//GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_OD_LOW_FAST);
+    //GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_OD_LOW_FAST);
+    //GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_OD_LOW_FAST);
     LCD_CS_PORT->DDR |= (u8)LCD_CS_PIN;
     LCD_CS_PORT->CR1 &= (u8)(~LCD_CS_PIN);
     LCD_CS_PORT->CR2 &= (u8)(~LCD_CS_PIN);

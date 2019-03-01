@@ -14,7 +14,7 @@
 
 #define CO2_WARM_UP_TIME    500     // * 10 ms
 
-#define CO2_ALARM_VALUE   	300
+#define CO2_ALARM_VALUE       300
 extern uint16_t g_adc1_co2_ad_value; 
 extern uint8_t g_co2_is_power_on;
 extern uint8_t g_co2_is_warm_up;

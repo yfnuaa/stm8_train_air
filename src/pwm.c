@@ -53,7 +53,7 @@ void pwm_set_motor_speed(u8 step)
         TIM2_SetCompare3(8*step); 
         #endif
         g_pwm_motor_speed_step = step;
-	      lcd_display_fan_speed(g_pwm_motor_speed_step);
+          lcd_display_fan_speed(g_pwm_motor_speed_step);
     }
 }
 
@@ -126,11 +126,11 @@ void pwm_set_motor_speed_down(void)
 
 void pwm_init(void)
 { 
-		#ifdef USE_DEFAULT_CLK_2M
+        #ifdef USE_DEFAULT_CLK_2M
     TIM2_TimeBaseInit(TIM2_PRESCALER_1, 100);//  f=20k  T = 50us
-		#else
+        #else
     TIM2_TimeBaseInit(TIM2_PRESCALER_1, 800);//  f=20k  T = 50us     800*(1/16000000) = 50 us
-		#endif
+        #endif
     TIM2_OC3Init(TIM2_OCMODE_PWM1, TIM2_OUTPUTSTATE_ENABLE, 0, TIM2_OCPOLARITY_HIGH);  //0 duty pwm init        
     TIM2_OC3PreloadConfig(ENABLE);
     TIM2_Cmd(ENABLE);  

@@ -15,18 +15,18 @@
 extern volatile u16 g_system_sensor_detect_timer_flag;
 void timer1_isr(void)  // 10 10 ms timer
 {
-	   GPIO_WriteReverse(GPIOC, GPIO_PIN_3);
+       GPIO_WriteReverse(GPIOC, GPIO_PIN_3);
      if(g_touch_long_press_count&&(BitStatus)(GPIOC->IDR & GPIO_PIN_5))
-		 {
-		    g_touch_long_press_count++;
-		 }
+         {
+            g_touch_long_press_count++;
+         }
      else 
-		 {
-		    g_touch_long_press_count = 0;
-		 }
+         {
+            g_touch_long_press_count = 0;
+         }
     if(g_touch_long_press_count >= LONG_PRESS_TIME_DEFINE)
     {
-		    print("power long pressed");
+            print("power long pressed");
         g_touch_power_long_pressed = SET;
         g_touch_long_press_count = 0;
     }

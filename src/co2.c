@@ -29,10 +29,11 @@ M = molecular weight  CO2 = 44
 void co2_calculate_density(uint16_t mv)
 {  
     //u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1023)/10;  // unit mv
-	//u16 calcVoltage =  g_adc1_pm25_ad_value * (500 / 1023);  // unit mv
-	u16 calcVoltage =  g_adc1_pm25_ad_value * 0.4887;  // unit mv
-	u16 co2ppm = calcVoltage;
-    g_co2_density = 44* co2ppm / 22.4;
+    //u16 calcVoltage =  g_adc1_pm25_ad_value * (500 / 1023);  // unit mv
+    u16 calcVoltage = (u16)( g_adc1_co2_ad_value * 0.488769);  // unit mv
+    u16 co2ppm = calcVoltage;
+    //g_co2_density =(u16)( 44* co2ppm / 22.4);
+    g_co2_density =(u16)( 1.9643 * co2ppm);  //unit  mg/m3
 }
 
 void co2_power_on()

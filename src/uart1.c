@@ -57,7 +57,7 @@ void print_enter()
 void print(unsigned char *ptr_string)
 {
     #if DEBUG
-    while(*ptr_string != '\0')	
+    while(*ptr_string != '\0')    
     {                   
       send_char(*ptr_string);              
       ptr_string++;  
@@ -72,7 +72,7 @@ void print(unsigned char *ptr_string)
 void print_u8(unsigned char *ptr_string, unsigned char dat)
 {
     #if DEBUG
-    while(*ptr_string != '\0')	
+    while(*ptr_string != '\0')    
     {                   
       send_char(*ptr_string);              
       ptr_string++;  
@@ -95,7 +95,7 @@ void print_u8(unsigned char *ptr_string, unsigned char dat)
 void print_u16(unsigned char *ptr_string, uint16_t dat)
 {
     #if DEBUG
-    while(*ptr_string != '\0')	
+    while(*ptr_string != '\0')    
     {                   
       send_char(*ptr_string);              
       ptr_string++;  

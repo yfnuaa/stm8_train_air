@@ -20,9 +20,10 @@ volatile uint16_t g_ad_value = 0;
 volatile BitStatus  g_adc_finished = 0;
 void adc1_reset(void)
 {
-	   ADC1_DeInit();
+       ADC1_Cmd(DISABLE);
+       ADC1_DeInit();
      g_adc_finished = RESET;
-		 g_ad_value = 0;
+         g_ad_value = 0;
 }
 #if 1
 void adc1_isr(void)
@@ -127,8 +128,8 @@ void  adc_init(void)
 {
     GPIO_Init(GPIOD,GPIO_PIN_3,GPIO_MODE_IN_PU_NO_IT);//AIN4 IO设置为上拉输入
     ADC1_PrescalerConfig(ADC1_PRESSEL_FCPU_D2);//预分频2
-	ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM,DISABLE);//不使用外部触发  
-	ADC1_SchmittTriggerConfig(ADC1_SCHMITTTRIG_CHANNEL4,DISABLE); //禁止AIN2 AIN4的施密特触发器，降低IO静态功耗
+    ADC1_ExternalTriggerConfig(ADC1_EXTTRIG_TIM,DISABLE);//不使用外部触发  
+    ADC1_SchmittTriggerConfig(ADC1_SCHMITTTRIG_CHANNEL4,DISABLE); //禁止AIN2 AIN4的施密特触发器，降低IO静态功耗
 
     //PD5,PD6上的通道如果施密特方式禁用会导致串口无法收发数据！
     ADC1_ConversionConfig(ADC1_CONVERSIONMODE_CONTINUOUS, //连续转换
@@ -143,8 +144,8 @@ void  adc_init(void)
 void main( void )
 { 
     u16value=0;   
-	adc_init(); 
-	while(1)
+    adc_init(); 
+    while(1)
     {
         while(!ADC1_GetFlagStatus(ADC1_FLAG_EOC));//等待转换完成
         ADC1_ClearFlag(ADC1_FLAG_EOC);//软件清除

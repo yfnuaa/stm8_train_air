@@ -54,13 +54,13 @@ void touch_key_mode_press(void)
     switch( g_system_mode )
     {
         case e_auto_mode:
-				    pwm_set_motor_speed(e_speed_middle);
+                    pwm_set_motor_speed(e_speed_middle);
             g_system_mode = e_manual_mode;
             print("Switch --> Manual Mode");
             break;
             
         case e_manual_mode:
-				    pwm_set_motor_speed(e_speed_low);
+                    pwm_set_motor_speed(e_speed_low);
             g_system_mode = e_sleep_mode;
             print("Switch --> Sleep Mode");
             break;
@@ -85,25 +85,25 @@ void touch_key_power_long_press(void)
     {
         case e_auto_mode:
         case e_manual_mode: 
-				case e_sleep_mode:
-				    co2_power_off();
-						adc1_reset();
-						lcd_back_light_off();
+                case e_sleep_mode:
+                    co2_power_off();
+                        adc1_reset();
+                        lcd_back_light_off();
             g_system_mode = e_power_off_mode;
             print("Switch --> Off Mode");
             break;
             
         case e_power_off_mode:
-				    lcd_back_light_on();
+                    lcd_back_light_on();
             g_system_mode = e_auto_mode;
-						
-						g_one_time_collect_timers = 0;        //goto adc collect immediately
-						g_system_sensor_detect_timer_flag = 0;//goto adc collect immediately
-						
-						co2_power_on();
+                        
+                        g_one_time_collect_timers = 0;        //goto adc collect immediately
+                        g_system_sensor_detect_timer_flag = 0;//goto adc collect immediately
+                        
+                        co2_power_on();
             print("Switch --> Auto Mode");
             break;
-						
+                        
         default:
             break;
     }
@@ -114,8 +114,8 @@ void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
     print("Key isr");
-		touch_key_DeInit();
-		
+        touch_key_DeInit();
+        
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
         print("Key[ Power]");
