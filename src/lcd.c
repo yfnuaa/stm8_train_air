@@ -220,7 +220,6 @@ void ht1621_light_up_always_on_seg(void)
         g_Ht1621Tab[di]|= 0x80;
 
     ht1621_write_all_data((u8)(di*2), g_Ht1621Tab+di,1);
-   
 }
 
   
@@ -301,7 +300,7 @@ void lcd_update_memory_loop(void)
             {
                 ht1621_write_one_data_4bits((u8)(i + 1),(u8)(g_Ht1621Tab[i]>>4));
             }
-            g_ht1621_tab[i] =    g_Ht1621Tab[i];        
+            g_ht1621_tab[i] = g_Ht1621Tab[i];        
         }
     }
 }
@@ -392,7 +391,7 @@ void lcd_display_fan_speed( u8 step)
     else if(step<=e_speed_low)
     {
         g_Ht1621Tab[7]&= (u8)(~0x60);
-          g_Ht1621Tab[7]|= 0x80; 
+        g_Ht1621Tab[7]|= 0x80; 
     }
     else if(step<=e_speed_middle)
     {
@@ -401,7 +400,6 @@ void lcd_display_fan_speed( u8 step)
     }
     else //if(step<=e_speed_high)
     {
- 
         g_Ht1621Tab[7]|= 0xE0;     
     }
     //ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);

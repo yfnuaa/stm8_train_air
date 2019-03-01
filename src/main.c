@@ -82,8 +82,8 @@ void main()
     pwm_init();
     pm25_init();
     co2_init();
- 
- 
+    lcd_display_air_quality(0);
+    lcd_display_fan_speed(0);
     print("PO");
     #if 1
     while(1)
@@ -124,7 +124,7 @@ void main()
     }
     #endif
      
- 
+    
     while(1)
     {
         if(g_touch_power_long_pressed)
@@ -175,7 +175,7 @@ void main()
         {   
             //Auto mode
             case e_auto_mode: 
-                if(g_pm25_dust_density <= e_pm25_good - 100)
+                if(g_pm25_dust_density <= e_pm25_good - 10)
                 {
                     pwm_set_motor_speed(e_speed_off);
                 }
