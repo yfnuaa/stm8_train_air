@@ -275,8 +275,12 @@ void lcd_back_light_off(void)
 {
     LCD_BACK_LIGHT_PORT->ODR &= (uint8_t)(~LCD_BACK_LIGHT_PIN);
 }
- 
-void lcd_stop(void)
+void lcd_on(void)
+{
+    ht1621_write_command(LCDON);
+    lcd_back_light_on();
+}
+void lcd_off(void)
 {
     ht1621_write_command(LCDOFF);
     lcd_back_light_off();

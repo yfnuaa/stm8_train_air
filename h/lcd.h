@@ -23,4 +23,6 @@ void lcd_display_air_quality( uint16_t quality );
 void lcd_test(void);
 void lcd_back_light_off(void);
 void lcd_back_light_on(void);
+void lcd_on(void);
+void lcd_off(void);
 #endif
