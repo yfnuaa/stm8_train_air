@@ -11,12 +11,13 @@
 #include "stm8s_tim4.h"
 #define TIMER4_C    1
 #include "timer4.h"
-
+#include "touch_key.h"
 volatile uint8_t g_time4_280us_ok = 0;
 volatile uint8_t g_time4_40us_ok = 0;
 
 enum time4_start_mode g_time4_start_mode = e_mode_null;
 
+#if 0
 void timer4_isr(void)
 {
     if( g_time4_start_mode == e_mode_280_us )
@@ -35,7 +36,7 @@ void timer4_isr(void)
     TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
     TIM4_Cmd(DISABLE);  
 }
-
+#
 
 void timer4_start_280us(void)         
 {   
@@ -75,4 +76,38 @@ void timer4_start_40us(void)
     //TIM4_ARRPreloadConfig(ENABLE);    
     TIM4_Cmd(ENABLE);  
 }
-
+#endif
+static volatile u16 g_10ms_delay_count = 0;
+void timer4_isr(void)
+{
+	  
+	  if(g_10ms_delay_count)
+    {
+        g_10ms_delay_count --;
+		}
+		else
+		{
+			   touch_key_Init();
+			   TIM4_Cmd(DISABLE); 
+		}
+		 
+    TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
+}
+void timer4_init()
+{
+    TIM4_Cmd(DISABLE);  
+    TIM4_DeInit();  
+	  #ifdef USE_DEFAULT_CLK_2M
+    TIM4_TimeBaseInit(TIM4_PRESCALER_32,  63);     //16us each timer   16 * 63 = 1ms.   
+		#else
+		TIM4_TimeBaseInit(TIM4_PRESCALER_128, 0x7D);       //8 us each timer   8 * 125 = 1ms.   
+		#endif
+    TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
+    TIM4_ARRPreloadConfig(ENABLE);  
+}
+void timer4_start()
+{
+	  if(g_10ms_delay_count) return;
+    g_10ms_delay_count = 0;
+    TIM4_Cmd(ENABLE);  
+}

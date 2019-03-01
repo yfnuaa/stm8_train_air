@@ -18,8 +18,8 @@ enum system_mode
     e_power_off_mode
 };
 
-#ifndef SYSTEM_C
-extern enum system_mode g_system_mode;
-#endif
+ 
+extern volatile enum system_mode g_system_mode;
+ 
 
 #endif

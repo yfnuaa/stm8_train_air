@@ -2,6 +2,7 @@
  * 
  * Copyright (c) 2002-2005 STMicroelectronics
  */
+ #include "stm8s.h"
 #define  SYSTEM_C   1
 #include "system.h"
 #include "pm25.h"
@@ -17,11 +18,11 @@
 #include "utility.h"
 #include "beep.h"
 
+#define DEFAULT_SENSOR_DETECT_TIMER   60000 //60*100;//one 1min one time
+volatile u32 g_system_sensor_detect_timer_flag; // 2S
+//#define SYSTEM_LCD_REFLUSH_INTERVAL             10   //10S
 
-#define SYSTEM_SENSOR_DETECT_INTERVAL           2   // 2S
-#define SYSTEM_LCD_REFLUSH_INTERVAL             10   //10S
-
-enum system_mode g_system_mode = e_auto_mode;
+volatile enum  system_mode g_system_mode = e_auto_mode;
 
 
 
@@ -59,6 +60,7 @@ void main()
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
 	#endif
+	  g_system_sensor_detect_timer_flag = 0; ;
     beep_init(); lcd_tone_off();
     uart1_init();    
     lcd_init();
@@ -139,35 +141,45 @@ void main()
         if( (g_system_mode == e_auto_mode) || (g_system_mode == e_manual_mode) || (g_system_mode == e_sleep_mode))
         {
             //Delay
-            delay_s(SYSTEM_SENSOR_DETECT_INTERVAL);
-   
-            if( g_pm25_need_detect )    
-            {
-                pm25_set_detect_begin();
-            }
-            //ADC start
-            //adc1_start();
-            while( g_adc_finished);
-            
-            if( g_pm25_need_detect )    
-            {
-                pm25_set_detect_end();
-            }
-             g_adc1_pm25_ad_value = g_ad_value;
-            //PM2.5 º∆À„
-            if( g_pm25_is_power_on && g_pm25_need_detect )
-            {
+            //delay_s(g_system_sensor_detect_timer_flag);
+						static g_one_time_collect_timers = 0;
+            if(0 == g_system_sensor_detect_timer_flag )//begin to collect ADC data
+						{ 
+						    if(g_one_time_collect_timers<=10)
+								{
+                pm25_power_on();
+								pm25_led_on();
+                delay_ms(2);// wait sensor stable 
+							  adc1_reset();
+								//begint c02-------------
+								//ADC start
+								ADC1_C4_Init();
+                //adc1_start();
+							  while( RESET == g_adc_finished){ nop();nop();}//wait adc finished
+								g_adc1_co2_ad_value = g_ad_value; 
+								co2_calculate_density(g_adc1_co2_ad_value);
+  						  
+								//begint PM25-------------
+								//ADC start
+								ADC1_C3_Init();
+                //adc1_start();
+							  while( RESET == g_adc_finished){ nop();nop();}//wait adc finished          
+ 
+								g_adc1_pm25_ad_value = g_ad_value;
                 pm25_calculate_density(g_adc1_pm25_ad_value);
-            }
-
-            if( g_co2_is_power_on && g_co2_is_warm_up && g_co2_need_detect )
-            {
-                co2_calculate_density(g_adc1_co2_ad_value);
-            }
-
-         
+								g_one_time_collect_timers++;
+							  }
+								else
+								{
+                    g_system_sensor_detect_timer_flag = DEFAULT_SENSOR_DETECT_TIMER;
+										g_one_time_collect_timers = 0;
+								}
+						}
         }
-
+        else
+				{
+            
+				}
         
         switch(g_system_mode)
         {   
@@ -201,7 +213,8 @@ void main()
                 break;
 
             //Power Off Mode
-            case e_power_off_mode:             
+            case e_power_off_mode:  
+                co2_power_off();						
                 break;
                
         } 

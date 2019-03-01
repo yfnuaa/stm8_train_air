@@ -28,5 +28,6 @@ extern enum time4_start_mode g_time4_start_mode;
 void timer4_start_280us(void);    
 void timer4_start_40us(void);    
 void timer4_init(void);
-
+ 
+void timer4_start(void);
 #endif

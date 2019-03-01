@@ -18,7 +18,12 @@ u16 g_ADC1_3C_Value;
 volatile uint16_t g_ad_value = 0;
 
 volatile BitStatus  g_adc_finished = 0;
- 
+void adc1_reset(void)
+{
+	   ADC1_DeInit();
+     g_adc_finished = RESET;
+		 g_ad_value = 0;
+}
 #if 1
 void adc1_isr(void)
 {

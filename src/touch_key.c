@@ -12,7 +12,7 @@
 #include "debug.h"
 #include "system.h"
 #include "pwm.h"
-
+#include "co2.h"
 #define TOUCH_KEY_PORT          GPIOC   
 #define TOUCH_KEY_EXTI_PORT     EXTI_PORT_GPIOC
 
@@ -79,17 +79,18 @@ void touch_key_power_long_press(void)
     switch( g_system_mode )
     {
         case e_auto_mode:
-        case e_manual_mode:
+        case e_manual_mode: 
+				case e_sleep_mode:
+				    co2_power_off();
             g_system_mode = e_power_off_mode;
             print("Switch --> Off Mode");
             break;
             
         case e_power_off_mode:
-        case e_sleep_mode:
             g_system_mode = e_auto_mode;
+						co2_power_on();
             print("Switch --> Auto Mode");
             break;
-            
         default:
             break;
     }
@@ -99,7 +100,9 @@ void touch_key_power_long_press(void)
 void touch_key_gpio_isr(void)
 {
     uint8_t value = GPIOC->IDR;
-      print("Key isr");
+    print("Key isr");
+		touch_key_DeInit();
+		
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
         print("Key[ Power]");
@@ -164,6 +167,11 @@ void touch_key_Init(void)
  
     GPIO_Init(TOUCH_KEY_PORT, TOUCH_KEY_ALL_PIN, GPIO_MODE_IN_FL_IT);
     EXTI_SetExtIntSensitivity(TOUCH_KEY_EXTI_PORT, EXTI_SENSITIVITY_RISE_ONLY);
+}
+void touch_key_DeInit(void)
+{
+    GPIO_Init(TOUCH_KEY_PORT, TOUCH_KEY_ALL_PIN, GPIO_MODE_IN_FL_NO_IT);
+    //EXTI_SetExtIntSensitivity(TOUCH_KEY_EXTI_PORT, EXTI_SENSITIVITY_RISE_ONLY);
 }
 
 
