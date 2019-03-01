@@ -11,12 +11,16 @@
 
 //#define UART_BRR2   0x00    //例如对于波特率位9600时，分频系数=2000000/9600=208
 //#define UART_BRR1   0x0d    //例如对于波特率位9600时，分频系数=2000000/9600=208
-
-#define UART_BRR2   0x01    //例如对于波特率位115200时，分频系数=2000000/9600=17
-#define UART_BRR1   0x01    //例如对于波特率位115200时，分频系数=2000000/9600=17
-
+#ifdef USE_DEFAULT_CLK_2M
+#define UART_BRR2   0x00    //例如对于波特率位9600时，分频系数=2000000/9600=208
+#define UART_BRR1   0x0d    //例如对于波特率位9600时，分频系数=2000000/9600=208
+#else
+#define UART_BRR2   0x82    //例如对于波特率位115200时，分频系数=16000000/9600=0x0682
+#define UART_BRR1   0x06    //例如对于波特率位115200时，分频系数=16000000/9600=0x0682
+#endif
+    #if DEBUG   
 unsigned char HexTable[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
+#endif
 
 void uart1_init(void)
 {
@@ -33,6 +37,8 @@ void uart1_init(void)
     UART1->BRR1 = UART_BRR1;
 #endif
     UART1->CR2=0x2c;    //允许接收，发送，开接收中断
+    
+    
     UART1_Init((u32)9600, UART1_WORDLENGTH_8D, UART1_STOPBITS_1, UART1_PARITY_NO, 
         UART1_SYNCMODE_CLOCK_DISABLE, UART1_MODE_TX_ENABLE);//|UART1_MODE_RX_ENABLE);
     UART1_Cmd(ENABLE);

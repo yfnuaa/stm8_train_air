@@ -56,18 +56,18 @@ void read_serial_no(void)
 
 void main()
 {
-    uint8_t i = 0;
     #ifndef USE_DEFAULT_CLK_2M
-    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                           // default is 8 div 
+    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);                            // default is 8 div 
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
     #endif
     g_system_sensor_detect_timer_flag = 0; 
 	
 	// beep and lcd
-    beep_init(); 
-    uart1_init();    
     lcd_init();
     lcd_test();
+    beep_init(); 
+    uart1_init();    
+
 	
 	// touch key
     touch_key_Init();
@@ -176,7 +176,6 @@ void main()
                 }
             }
         }
- 
         
         switch(g_system_mode)
         {   

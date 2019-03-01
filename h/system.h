@@ -10,6 +10,7 @@
 #ifndef __SYSTEM_H___
 #define __SYSTEM_H___
 //#define USE_DEFAULT_CLK_2M
+#define DEBUG   1
 #define RUIZHU_TEST
 enum system_mode
 {

@@ -12,7 +12,7 @@
 #include "system.h"
 #include "stm8s.h"
 
-#define DEBUG   1
+
  
 void uart1_init(void);
 void print_enter(void);
