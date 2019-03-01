@@ -92,7 +92,7 @@ void main()
     #endif        
         
 
-    #if 1   //test ad and touch
+    #if 1   //test ad lcd and touch
     while( 1 )
     {
         if(g_touch_power_long_pressed)
