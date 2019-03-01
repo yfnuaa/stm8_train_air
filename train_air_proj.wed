@@ -372,9 +372,9 @@ MRUWidth=131
 Docking=True
 MRUDockID=59419
 MRUDockLeftPos=-1
-MRUDockTopPos=-1
+MRUDockTopPos=31
 MRUDockRightPos=147
-MRUDockBottomPos=29
+MRUDockBottomPos=61
 MRUFloatStyle=8196
 MRUFloatXPos=-2
 MRUFloatYPos=0
@@ -411,9 +411,9 @@ MRUWidth=566
 Docking=True
 MRUDockID=59419
 MRUDockLeftPos=147
-MRUDockTopPos=-1
+MRUDockTopPos=31
 MRUDockRightPos=730
-MRUDockBottomPos=29
+MRUDockBottomPos=61
 MRUFloatStyle=8196
 MRUFloatXPos=-2
 MRUFloatYPos=0
@@ -569,9 +569,9 @@ MRUWidth=23
 Docking=True
 MRUDockID=59419
 MRUDockLeftPos=730
-MRUDockTopPos=-1
+MRUDockTopPos=31
 MRUDockRightPos=770
-MRUDockBottomPos=29
+MRUDockBottomPos=61
 MRUFloatStyle=8196
 MRUFloatXPos=-2
 MRUFloatYPos=0
@@ -730,7 +730,7 @@ MRUDockID=0
 MRUDockLeftPos=1
 MRUDockTopPos=-2
 MRUDockRightPos=215
-MRUDockBottomPos=1
+MRUDockBottomPos=461
 MRUFloatStyle=4
 MRUFloatXPos=-2
 MRUFloatYPos=0
@@ -763,7 +763,7 @@ Docking=True
 MRUDockID=0
 MRUDockLeftPos=1
 MRUDockTopPos=5
-MRUDockRightPos=1
+MRUDockRightPos=1536
 MRUDockBottomPos=229
 MRUFloatStyle=4
 MRUFloatXPos=-2
@@ -1243,7 +1243,7 @@ ptn_Child2=ChildFrames
 
 [WorkState_v1_2.Frames.MainFrame]
 WindowPlacement=MCAAAAAACAAAAAAADAAAAAAAAADIPPPPAADIPPPPPPPPPPPPPPPPPPPPHLAAAAAAEHAAAAAAJOFAAAAADBDAAAAA
-Title=ST Visual Develop - train_air_proj.stw - [main.c]
+Title=ST Visual Develop - train_air_proj.stw - [system.h]
 
 [WorkState_v1_2.Frames.ChildFrames]
 ptn_Child1=Document-0
@@ -1257,34 +1257,22 @@ ptn_Child8=Document-7
 ptn_Child9=Document-8
 ptn_Child10=Document-9
 ptn_Child11=Document-10
-ptn_Child12=Document-11
 
 [WorkState_v1_2.Frames.ChildFrames.Document-0]
 ptn_Child1=ViewFrame-0
 
 [WorkState_v1_2.Frames.ChildFrames.Document-0.ViewFrame-0]
-DocPathName=src\main.c
+DocPathName=src\utility.c
 DocumentString=
 DocTemplateIndex=0
-WindowPlacement=MCAAAAAACAAAAAAADAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPACAAAAAAACAAAAAAJOFAAAAAPLBAAAAA
-IsActiveChildFrame=True
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPIGAAAAAAIGAAAAAAPOEAAAAAFIBAAAAA
+IsActiveChildFrame=False
 IsFrameVisible=True
 
 [WorkState_v1_2.Frames.ChildFrames.Document-1]
 ptn_Child1=ViewFrame-0
 
 [WorkState_v1_2.Frames.ChildFrames.Document-1.ViewFrame-0]
-DocPathName=src\pm25.c
-DocumentString=
-DocTemplateIndex=0
-WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPAGAAAAAAAGAAAAAAJCGAAAAAPPBAAAAA
-IsActiveChildFrame=False
-IsFrameVisible=True
-
-[WorkState_v1_2.Frames.ChildFrames.Document-2]
-ptn_Child1=ViewFrame-0
-
-[WorkState_v1_2.Frames.ChildFrames.Document-2.ViewFrame-0]
 DocPathName=src\adc1.c
 DocumentString=
 DocTemplateIndex=0
@@ -1292,10 +1280,10 @@ WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPHPPPPPPPKNPPPPPPAIAAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
-[WorkState_v1_2.Frames.ChildFrames.Document-3]
+[WorkState_v1_2.Frames.ChildFrames.Document-2]
 ptn_Child1=ViewFrame-0
 
-[WorkState_v1_2.Frames.ChildFrames.Document-3.ViewFrame-0]
+[WorkState_v1_2.Frames.ChildFrames.Document-2.ViewFrame-0]
 DocPathName=src\adc.c
 DocumentString=
 DocTemplateIndex=0
@@ -1303,10 +1291,10 @@ WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPAKAAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
-[WorkState_v1_2.Frames.ChildFrames.Document-4]
+[WorkState_v1_2.Frames.ChildFrames.Document-3]
 ptn_Child1=ViewFrame-0
 
-[WorkState_v1_2.Frames.ChildFrames.Document-4.ViewFrame-0]
+[WorkState_v1_2.Frames.ChildFrames.Document-3.ViewFrame-0]
 DocPathName=src\co2.c
 DocumentString=
 DocTemplateIndex=0
@@ -1314,10 +1302,10 @@ WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPACAAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
-[WorkState_v1_2.Frames.ChildFrames.Document-5]
+[WorkState_v1_2.Frames.ChildFrames.Document-4]
 ptn_Child1=ViewFrame-0
 
-[WorkState_v1_2.Frames.ChildFrames.Document-5.ViewFrame-0]
+[WorkState_v1_2.Frames.ChildFrames.Document-4.ViewFrame-0]
 DocPathName=h\adc.h
 DocumentString=
 DocTemplateIndex=0
@@ -1325,21 +1313,10 @@ WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPHPPPPPPPKNPPPPPPAEAAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
-[WorkState_v1_2.Frames.ChildFrames.Document-6]
+[WorkState_v1_2.Frames.ChildFrames.Document-5]
 ptn_Child1=ViewFrame-0
 
-[WorkState_v1_2.Frames.ChildFrames.Document-6.ViewFrame-0]
-DocPathName=src\touch_key.c
-DocumentString=
-DocTemplateIndex=0
-WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPKBAAAAAAKBAAAAAABKEAAAAAHDBAAAAA
-IsActiveChildFrame=False
-IsFrameVisible=True
-
-[WorkState_v1_2.Frames.ChildFrames.Document-7]
-ptn_Child1=ViewFrame-0
-
-[WorkState_v1_2.Frames.ChildFrames.Document-7.ViewFrame-0]
+[WorkState_v1_2.Frames.ChildFrames.Document-5.ViewFrame-0]
 DocPathName=src\timer1.c
 DocumentString=
 DocTemplateIndex=0
@@ -1347,10 +1324,10 @@ WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPEDAAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
-[WorkState_v1_2.Frames.ChildFrames.Document-8]
+[WorkState_v1_2.Frames.ChildFrames.Document-6]
 ptn_Child1=ViewFrame-0
 
-[WorkState_v1_2.Frames.ChildFrames.Document-8.ViewFrame-0]
+[WorkState_v1_2.Frames.ChildFrames.Document-6.ViewFrame-0]
 DocPathName=h\timer4.h
 DocumentString=
 DocTemplateIndex=0
@@ -1358,14 +1335,36 @@ WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPIGAAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
+[WorkState_v1_2.Frames.ChildFrames.Document-7]
+ptn_Child1=ViewFrame-0
+
+[WorkState_v1_2.Frames.ChildFrames.Document-7.ViewFrame-0]
+DocPathName=h\system.h
+DocumentString=
+DocTemplateIndex=0
+WindowPlacement=MCAAAAAACAAAAAAADAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPKBAAAAAAKBAAAAAABKEAAAAAHDBAAAAA
+IsActiveChildFrame=True
+IsFrameVisible=True
+
+[WorkState_v1_2.Frames.ChildFrames.Document-8]
+ptn_Child1=ViewFrame-0
+
+[WorkState_v1_2.Frames.ChildFrames.Document-8.ViewFrame-0]
+DocPathName=h\debug.h
+DocumentString=
+DocTemplateIndex=0
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPEDAAAAAAEDAAAAAALLEAAAAABFBAAAAA
+IsActiveChildFrame=False
+IsFrameVisible=True
+
 [WorkState_v1_2.Frames.ChildFrames.Document-9]
 ptn_Child1=ViewFrame-0
 
 [WorkState_v1_2.Frames.ChildFrames.Document-9.ViewFrame-0]
-DocPathName=h\pwm.h
+DocPathName=src\touch_key.c
 DocumentString=
 DocTemplateIndex=0
-WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPKBAAAAAAKBAAAAAABKEAAAAAHDBAAAAA
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPOEAAAAAAOEAAAAAAFNEAAAAALGBAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True
 
@@ -1373,20 +1372,9 @@ IsFrameVisible=True
 ptn_Child1=ViewFrame-0
 
 [WorkState_v1_2.Frames.ChildFrames.Document-10.ViewFrame-0]
-DocPathName=src\lcd.c
+DocPathName=src\uart1.c
 DocumentString=
 DocTemplateIndex=0
-WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPEDAAAAAAEDAAAAAALLEAAAAABFBAAAAA
-IsActiveChildFrame=False
-IsFrameVisible=True
-
-[WorkState_v1_2.Frames.ChildFrames.Document-11]
-ptn_Child1=ViewFrame-0
-
-[WorkState_v1_2.Frames.ChildFrames.Document-11.ViewFrame-0]
-DocPathName=src\utility.c
-DocumentString=
-DocTemplateIndex=0
-WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPIGAAAAAAIGAAAAAAPOEAAAAAFIBAAAAA
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPKBAAAAAAKBAAAAAABKEAAAAAHDBAAAAA
 IsActiveChildFrame=False
 IsFrameVisible=True

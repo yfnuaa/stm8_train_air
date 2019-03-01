@@ -478,7 +478,7 @@ PathName=src\pwm.c
 [Root.Include Files]
 ElemType=Folder
 PathName=Include Files
-Child=Root.Include Files.h\adc.h
+Child=Root.Include Files.h\debug.h
 Config.0=Root.Include Files.Config.0
 Config.1=Root.Include Files.Config.1
 
@@ -547,6 +547,11 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2019,1,30,22,11,59
+
+[Root.Include Files.h\debug.h]
+ElemType=File
+PathName=h\debug.h
+Next=Root.Include Files.h\adc.h
 
 [Root.Include Files.h\adc.h]
 ElemType=File
