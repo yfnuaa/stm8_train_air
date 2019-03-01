@@ -20,6 +20,7 @@ enum e_touch_key
 };
 extern volatile BitStatus g_touch_power_long_pressed;
 extern volatile u16 g_touch_long_press_count;
+void touch_key_power_long_press(void);
 void touch_key_Init(void);
 void touch_key_DeInit(void);
 #endif

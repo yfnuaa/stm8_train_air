@@ -13,6 +13,8 @@
 #include "system.h"
 #include "pwm.h"
 #include "co2.h"
+#include "adc.h"
+#include "lcd.h"
 #define TOUCH_KEY_PORT          GPIOC   
 #define TOUCH_KEY_EXTI_PORT     EXTI_PORT_GPIOC
 
@@ -52,11 +54,13 @@ void touch_key_mode_press(void)
     switch( g_system_mode )
     {
         case e_auto_mode:
+				    pwm_set_motor_speed(e_speed_middle);
             g_system_mode = e_manual_mode;
             print("Switch --> Manual Mode");
             break;
             
         case e_manual_mode:
+				    pwm_set_motor_speed(e_speed_low);
             g_system_mode = e_sleep_mode;
             print("Switch --> Sleep Mode");
             break;
@@ -71,7 +75,8 @@ void touch_key_mode_press(void)
     }
 }
 
-
+extern u8 g_one_time_collect_timers;
+extern volatile u32 g_system_sensor_detect_timer_flag;
 void touch_key_power_long_press(void)
 {
     beep_on_ms(LONG_PRESS_BEEP_ON_TIME);
@@ -82,15 +87,23 @@ void touch_key_power_long_press(void)
         case e_manual_mode: 
 				case e_sleep_mode:
 				    co2_power_off();
+						adc1_reset();
+						lcd_back_light_off();
             g_system_mode = e_power_off_mode;
             print("Switch --> Off Mode");
             break;
             
         case e_power_off_mode:
+				    lcd_back_light_on();
             g_system_mode = e_auto_mode;
+						
+						g_one_time_collect_timers = 0;        //goto adc collect immediately
+						g_system_sensor_detect_timer_flag = 0;//goto adc collect immediately
+						
 						co2_power_on();
             print("Switch --> Auto Mode");
             break;
+						
         default:
             break;
     }
@@ -106,33 +119,27 @@ void touch_key_gpio_isr(void)
     if( (value & TOUCH_KEY_POWER_PIN) != 0)
     {
         print("Key[ Power]");
-         
         g_touch_key_power_pressed = 1;
         g_touch_long_press_count=1;
-        
     }
 
     if( (value & TOUCH_KEY_MODE_PIN) != 0)
     {
         print("Key[ Mode]");
-        print_enter();
         touch_key_mode_press();
     }
 
     if( (value & TOUCH_KEY_MINUS_PIN) != 0)
     {
         print("Key[----]");
-        print_enter();
         touch_key_minus_press();
     }
 
     if( (value & TOUCH_KEY_PLUS_PIN) != 0)
     {
         print("Key[++++]");
-        print_enter();
         touch_key_plus_press();
     }
-    
 }
 
 

@@ -20,6 +20,7 @@
 
 #define DEFAULT_SENSOR_DETECT_TIMER   60000 //60*100;//one 1min one time
 volatile u32 g_system_sensor_detect_timer_flag; // 2S
+u8 g_one_time_collect_timers = 0;
 //#define SYSTEM_LCD_REFLUSH_INTERVAL             10   //10S
 
 volatile enum  system_mode g_system_mode = e_auto_mode;
@@ -83,66 +84,52 @@ void main()
     print("PO");
  
 
-    #if 1
+    #if 1   //test ad and touch
     while( 1 )
     {
-      //  adc1_start();x
-        ADC1_C4_Init();
-        pm25_led_on();
-        pm25_power_off();
-        co2_power_off();
-        delay_280us();
-        
-        delay_40us();
-        pm25_led_off();
-        pm25_power_on();
-        co2_power_on();
-        delay_ms(3000);
+ 
+			  if(g_touch_power_long_pressed)
+				{
+				    touch_key_power_long_press();
+						g_touch_power_long_pressed = RESET;
+				}
+                pm25_power_on();
+								pm25_led_on();
+                delay_ms(2);// wait sensor stable 
+							  adc1_reset();
+								//begint c02-------------
+								//ADC start
+								ADC1_C4_Init();
+                //adc1_start();
+							  while( RESET == g_adc_finished){ nop();nop();}//wait adc finished
+								g_adc1_co2_ad_value = g_ad_value; 
+								co2_calculate_density(g_adc1_co2_ad_value);
+  						  
+								//begint PM25-------------
+								//ADC start
+								ADC1_C3_Init();
+                //adc1_start();
+							  while( RESET == g_adc_finished){ nop();nop();}//wait adc finished          
+ 
+								g_adc1_pm25_ad_value = g_ad_value;
+                pm25_calculate_density(g_adc1_pm25_ad_value);
+								delay_ms(5000);
     }
     #endif
-    
-    while(1)
-    {
-        
-        //print("RE ...");
-        //pm25_set_detect_begin()
-        print_u8("Test --------------------------->  ", i++);
-        if(SET == g_touch_power_long_pressed)print("power ON long pressed");
-        #if 1
-        pm25_set_detect_begin();
-        //timer4_start_280us();
-        delay_280us();
-        //while(g_time4_280us_ok != 0);
      
-        
-        //timer4_start_40us();
-        //while(g_time4_40us_ok != 0);
-        delay_40us();
-        pm25_set_detect_end();
-        
-        print_u16("g_adc1_pm25_ad_value = ", g_adc1_pm25_ad_value);
-        
-        #endif
-        
-        delay_ms(10000);
-        print_enter();
-        print_enter();
-        //delay_280us();
-    }
-    
-
-    //上电自检
-    //上电 LCD 全亮一下
-    // ...
-    // ...
-    //显示默认值 如 ---  ---
+ 
     while(1)
     {
+        if(g_touch_power_long_pressed)
+				{
+				    touch_key_power_long_press();
+						g_touch_power_long_pressed = RESET;
+				}
         if( (g_system_mode == e_auto_mode) || (g_system_mode == e_manual_mode) || (g_system_mode == e_sleep_mode))
         {
             //Delay
             //delay_s(g_system_sensor_detect_timer_flag);
-						static g_one_time_collect_timers = 0;
+						
             if(0 == g_system_sensor_detect_timer_flag )//begin to collect ADC data
 						{ 
 						    if(g_one_time_collect_timers<=10)
@@ -176,10 +163,7 @@ void main()
 								}
 						}
         }
-        else
-				{
-            
-				}
+ 
         
         switch(g_system_mode)
         {   
@@ -210,6 +194,7 @@ void main()
 						    break;
             //Sleep Mode
             case e_sleep_mode:
+
                 break;
 
             //Power Off Mode
