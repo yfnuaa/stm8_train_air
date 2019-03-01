@@ -8,6 +8,7 @@
   */ 
 #include "stm8s.h"
 #include "debug.h"
+#include "lcd.h"
 
 #define CO2_GPIO_PORT       GPIOB
 #define CO2_GPIO_PIN        GPIO_PIN_4
@@ -46,6 +47,7 @@ void co2_calculate_density(uint16_t mv)
     u16 co2ppm = calcVoltage; 
     //g_co2_density =(u16)( 44* co2ppm / 22.4);                     //  mg/m3
     g_co2_density = (g_co2_density+(u16)( 1.9643 * co2ppm))>>1;     //unit  mg/m3
+		lcd_display_co2(g_co2_density);
 }
 
 void co2_power_on()

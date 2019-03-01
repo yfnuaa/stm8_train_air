@@ -151,7 +151,7 @@ void main()
                     while( RESET == g_adc_finished){ nop();nop();}//wait adc finished
                     g_adc1_co2_ad_value = g_ad_value; 
                     co2_calculate_density(g_adc1_co2_ad_value);
-                      
+										
                     //begint PM25-------------
                     //ADC start
                     ADC1_C3_Init();

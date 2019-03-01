@@ -514,10 +514,10 @@ void lcd_test(void)
     lcd_display_fan_speed(e_speed_middle);
     delay_ms(300);
     lcd_display_fan_speed(e_speed_high);
-   // for(i=0;i<999;i++)
-{lcd_display_pm25(888);delay_ms(100);}
+    // for(i=0;i<999;i++)
+    {   lcd_display_pm25(888);delay_ms(100);}
     //    for(i=0;i<999;i++)
-   { lcd_display_co2(888);delay_ms(100);}
+    { lcd_display_co2(888);delay_ms(100);}
     
 }
 

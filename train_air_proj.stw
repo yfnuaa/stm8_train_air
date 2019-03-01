@@ -6,10 +6,3 @@ Keyword=ST7Workspace-V0.7
 [Project0]
 Filename=train_air_proj.stp
 Dependencies=
-[Options]
-ActiveProject=train_air_proj
-ActiveConfig=Release
-AddSortedElements=0
-[Batch Build]
-Debug=train_air_proj
-Release=train_air_proj

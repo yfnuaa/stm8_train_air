@@ -474,11 +474,6 @@ Next=Root.Source Files.src\pwm.c
 [Root.Source Files.src\pwm.c]
 ElemType=File
 PathName=src\pwm.c
-Next=Root.Source Files.src\utility.c
-
-[Root.Source Files.src\utility.c]
-ElemType=File
-PathName=src\utility.c
 
 [Root.Include Files]
 ElemType=Folder
@@ -611,8 +606,3 @@ Next=Root.Include Files.h\stm8s_it.h
 [Root.Include Files.h\stm8s_it.h]
 ElemType=File
 PathName=h\stm8s_it.h
-Next=Root.Include Files.h\utility.h
-
-[Root.Include Files.h\utility.h]
-ElemType=File
-PathName=h\utility.h
