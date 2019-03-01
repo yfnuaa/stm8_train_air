@@ -132,7 +132,7 @@ void main()
             touch_key_power_long_press();
             g_touch_power_long_pressed = RESET;
         }
-        if( (g_system_mode == e_auto_mode) || (g_system_mode == e_manual_mode) || (g_system_mode == e_sleep_mode))
+        if((g_system_mode == e_auto_mode) || (g_system_mode == e_manual_mode) || (g_system_mode == e_sleep_mode))
         {
             //Delay
             //delay_s(g_system_sensor_detect_timer_flag);
