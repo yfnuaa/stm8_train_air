@@ -83,38 +83,30 @@ void timer4_start_40us(void)
 volatile u16 g_10ms_delay_count = 0;
 void timer4_isr(void)  // 1ms timer
 {   
-g_10ms_delay_count++;
-if(g_10ms_delay_count >=1000)
-{g_10ms_delay_count = 0;
-    
-   print("xvr"); 
-} 
-#if 0
+    print("xvr"); 
     if(g_10ms_delay_count)
     {
         g_10ms_delay_count --;
     }
     else
     {
-       // touch_key_Init();
-       // TIM4_Cmd(DISABLE); 
+        touch_key_Init();
+        TIM4_Cmd(DISABLE); 
     }
-    #endif
-   
     TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
+    TIM4_Cmd(ENABLE);
 }
 void timer4_init()
 {
-    TIM4_Cmd(DISABLE);  
-  
+    TIM4_DeInit();
     #ifdef USE_DEFAULT_CLK_2M
     TIM4_TimeBaseInit(TIM4_PRESCALER_32,  63);     //16us each timer   16 * 63 = 1ms.   
     #else
-    TIM4_TimeBaseInit(TIM4_PRESCALER_128, 0xFE);//0x7D);       //8 us each timer   8 * 125 = 1ms.   
+    TIM4_TimeBaseInit(TIM4_PRESCALER_128, 125);//0x7D);       //8 us each timer   8 * 125 = 1ms.   
     #endif
-    TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
-    TIM4_ARRPreloadConfig(ENABLE);  
-    TIM1_Cmd(ENABLE);                   //使能计时器  
+    //TIM4_PrescalerConfig(TIM4_PRESCALER_128,TIM4_PSCRELOADMODE_IMMEDIATE);
+    TIM4_ARRPreloadConfig(ENABLE);     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE); 
+    TIM4_Cmd(ENABLE);                   //使能计时器  
 }
 void timer4_start()
 {
