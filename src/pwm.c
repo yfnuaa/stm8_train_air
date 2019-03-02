@@ -16,11 +16,7 @@
 u8 g_pwm_motor_speed_step = e_speed_off;
 
 
-void pwm_set_freq(u8 frqKZH)
-{
-    // void TIM2_SetCompare3(uint16_t Compare3);
-}
-
+ 
 void pwm_set_duty(u8  step)
 {
     if(step>=e_speed_full) 
@@ -32,7 +28,25 @@ void pwm_set_duty(u8  step)
     
     TIM2_SetCompare3(step); 
 }
-
+void pwm_set_freq(u16 freq)
+{ 
+  
+    if(freq>3000) return;
+    //freq = 333+((3000-freq)*5.5);print_u16("freq_COUNTRR",freq);
+if(0==freq){TIM2_DeInit();return;};
+    freq =(u16)( 1000000/freq);
+    print_u16("freq",freq);
+    TIM2_DeInit();
+    #ifdef USE_DEFAULT_CLK_2M
+    TIM2_TimeBaseInit(TIM2_PRESCALER_2, freq);//  f=20k  T = 50us
+    #else
+    TIM2_TimeBaseInit(TIM2_PRESCALER_16, freq);//  f=20k  T = 50us     800*(1/16000000) = 50 us
+    #endif
+    TIM2_OC3Init(TIM2_OCMODE_PWM1, TIM2_OUTPUTSTATE_ENABLE, freq>>1, TIM2_OCPOLARITY_HIGH);  //0 duty pwm init        
+    TIM2_OC3PreloadConfig(ENABLE);
+    TIM2_Cmd(ENABLE); 
+    
+}
 
 void pwm_stop(void)
 {
@@ -124,13 +138,13 @@ void pwm_set_motor_speed_down(void)
 }
 
 
-void pwm_init(void)
+void pwm_init()
 { 
-        #ifdef USE_DEFAULT_CLK_2M
-    TIM2_TimeBaseInit(TIM2_PRESCALER_1, 100);//  f=20k  T = 50us
-        #else
-    TIM2_TimeBaseInit(TIM2_PRESCALER_1, 800);//  f=20k  T = 50us     800*(1/16000000) = 50 us
-        #endif
+    #ifdef USE_DEFAULT_CLK_2M
+    TIM2_TimeBaseInit(TIM2_PRESCALER_2, 0);//  f=20k  T = 50us
+    #else
+    TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0);//  f=20k  T = 50us     800*(1/16000000) = 50 us
+    #endif
     TIM2_OC3Init(TIM2_OCMODE_PWM1, TIM2_OUTPUTSTATE_ENABLE, 0, TIM2_OCPOLARITY_HIGH);  //0 duty pwm init        
     TIM2_OC3PreloadConfig(ENABLE);
     TIM2_Cmd(ENABLE);  

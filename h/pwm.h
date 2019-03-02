@@ -16,7 +16,7 @@ extern enum pwm_motor_speed_step g_pwm_motor_speed_step;
 #endif
 
 void pwm_init(void);
-void pwm_set_freq(u8 frqKZH);
+void pwm_set_freq(u16 freq);
 void pwm_set_duty(u8 duty);//0-100
 void pwm_stop(void);
 void pwm_set_motor_speed_up(void);

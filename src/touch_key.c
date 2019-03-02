@@ -142,9 +142,9 @@ void touch_key_gpio_isr(void)
         print("Key[----]");
         #ifdef RUIZHU_TEST
          beep_on_ms(SHORT_PRESS_BEEP_ON_TIME);
-        g_test_speed-=5;
+        g_test_speed-=1;
         if(g_test_speed<0) g_test_speed = 0;
-        pwm_set_motor_speed(g_test_speed);
+        pwm_set_freq(g_test_speed*30);
         lcd_display_pm25(g_test_speed);
         #else 
        
@@ -157,9 +157,9 @@ void touch_key_gpio_isr(void)
         print("Key[++++]");
         #ifdef RUIZHU_TEST
          beep_on_ms(SHORT_PRESS_BEEP_ON_TIME);
-        g_test_speed+=5;
-        if(g_test_speed>80) g_test_speed = 80;
-        pwm_set_motor_speed(g_test_speed);
+        g_test_speed+=1;
+        if(g_test_speed>100) g_test_speed = 100;
+        pwm_set_freq(g_test_speed*30);
         lcd_display_pm25(g_test_speed);
         #else 
        

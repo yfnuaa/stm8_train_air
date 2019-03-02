@@ -11,7 +11,7 @@
 #define __SYSTEM_H___
 //#define USE_DEFAULT_CLK_2M    //open this to enable system to 2M default clock
 #define DEBUG   1               //enable this will send uart message 
-#define RUIZHU_TEST             //this is use for ruizhu test ,only funciton is adjust fan speed   0% 5% 10% 15% ... 80%
+//#define RUIZHU_TEST             //this is use for ruizhu test ,only funciton is adjust fan speed   0% 5% 10% 15% ... 80%
 enum system_mode
 {
     e_auto_mode = 0,

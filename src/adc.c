@@ -25,12 +25,12 @@ void adc1_reset(void)
      g_adc_finished = RESET;
          g_ad_value = 0;
 }
-#if 1
+#if 1 
 void adc1_isr(void)
 {
     /* Get converted value */
     g_ad_value = ADC1_GetConversionValue( ); 
-    print_u16("adc [",g_ad_value);
+    print_u16("ADC",g_ad_value);
  
     g_adc_finished = SET;
     ADC1_ClearITPendingBit(ADC1_IT_EOC);
@@ -62,7 +62,7 @@ void ADC1_C4_Init(void)  //co2
    /**DISABLE ADC2_SchmittTriggerState*/
    ADC1_Init(ADC1_CONVERSIONMODE_SINGLE , ADC1_CHANNEL_4, ADC1_PRESSEL_FCPU_D18,
    ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL4,DISABLE);
-   ADC1_ITConfig(ADC1_IT_EOCIE, DISABLE);
+   ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
    
    
 #else // CONVERSIONMODE ==CONVERSIONMODE_CONTINUOUS
@@ -76,7 +76,7 @@ void ADC1_C4_Init(void)  //co2
    /**DISABLE ADC2_SchmittTriggerState*/
    ADC1_Init(ADC1_CONVERSIONMODE_CONTINUOUS , ADC1_CHANNEL_4, ADC1_PRESSEL_FCPU_D18,
    ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL4,DISABLE);
-   ADC1_ITConfig(ADC1_IT_EOCIE, DISABLE);
+   ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
 #endif
    
     ADC1_Cmd(ENABLE);
