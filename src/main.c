@@ -81,24 +81,27 @@ void main()
     //senor and  motor
     pwm_init();
     
-    #ifndef RUIZHU_TEST
+ 
     pm25_init();
     co2_init();
-    #endif
-    
-    
+ 
+    //timer4_init();
+
     lcd_display_air_quality(0);
     lcd_display_fan_speed(0);
     print("PO");
     #ifdef  RUIZHU_TEST   // for  ruizu fan test
     while(1)
     {
- 
-    
+      
     }
     #endif        
         
-
+    while(0)
+    {
+        pm25_led_on(); pm25_power_on();delay_ms(500);
+        pm25_led_off(); pm25_power_off();delay_ms(500);
+    }
     #if 1   //test ad lcd and touch
     while( 1 )
     {
@@ -108,23 +111,24 @@ void main()
             g_touch_power_long_pressed = RESET;
         }
         pm25_power_on();
-        pm25_led_on();
+
         delay_ms(2);// wait sensor stable 
-        adc1_reset();
         //begint c02-------------
         //ADC start
         ADC1_C4_Init();
-        //adc1_start();
+     
         while( RESET == g_adc_finished){ nop();nop();}//wait adc finished
         g_adc1_co2_ad_value = g_ad_value; 
         co2_calculate_density(g_adc1_co2_ad_value);
           
         //begint PM25-------------
         //ADC start
+        pm25_led_on();
+        delay_280us();
         ADC1_C3_Init();
         //adc1_start();
         while( RESET == g_adc_finished){ nop();nop();}//wait adc finished          
- 
+         pm25_led_off();
         g_adc1_pm25_ad_value = g_ad_value;
         pm25_calculate_density(g_adc1_pm25_ad_value);
         delay_ms(5000);

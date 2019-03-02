@@ -476,7 +476,7 @@ void lcd_init(void)
     lcd_tone_off();
 }
 void lcd_test(void)
-{   u8 i;
+{   u16 i;
     u16 j;
     //u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
     // u8 Ht1621Tab[]={0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
@@ -517,10 +517,13 @@ void lcd_test(void)
     lcd_display_fan_speed(e_speed_middle);
     delay_ms(300);
     lcd_display_fan_speed(e_speed_high);
-    // for(i=0;i<999;i++)
-    {   lcd_display_pm25(000);delay_ms(100);}
+     for(i=0;i<1000;i+=111)
+    {  
+    lcd_display_pm25(i);
     //    for(i=0;i<999;i++)
-    { lcd_display_co2(000);delay_ms(100);}
+     lcd_display_co2(i);
+     delay_ms(200);;
+     }
     
 }
 

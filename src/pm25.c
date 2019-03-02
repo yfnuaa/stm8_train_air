@@ -59,8 +59,9 @@ void pm25_calculate_density(uint16_t mv)
     */
     //u16 calcVoltage =  g_adc1_pm25_ad_value * (5000 / 1023);
     u16 calcVoltage   =  (u16)(g_adc1_pm25_ad_value * 4.88759);      //unit  mv
-    //g_pm25_dust_density = (uint16_t)( 0.17 * calcVoltage - 0.1);   //将电压值转换为粉尘密度输出单位   //unit mg/m3
-    g_pm25_dust_density = (g_pm25_dust_density+(uint16_t)( 0.17 * calcVoltage - 100))>>1; //将电压值转换为粉尘密度输出单位     //unit  ug/m3
+    g_pm25_dust_density = (uint16_t)( 0.17 * calcVoltage - 0.1);   //将电压值转换为粉尘密度输出单位   //unit mg/m3
+    //g_pm25_dust_density = (g_pm25_dust_density+(uint16_t)( 0.17 * calcVoltage - 100))>>1; //将电压值转换为粉尘密度输出单位     //unit  ug/m3
+    print_u16("pm2.5 value", g_pm25_dust_density);
     lcd_display_pm25(g_pm25_dust_density);
 }
 

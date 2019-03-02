@@ -20,17 +20,17 @@ volatile uint16_t g_ad_value = 0;
 volatile BitStatus  g_adc_finished = 0;
 void adc1_reset(void)
 {
-       ADC1_Cmd(DISABLE);
-       ADC1_DeInit();
-     g_adc_finished = RESET;
-         g_ad_value = 0;
+    ADC1_Cmd(DISABLE);
+    ADC1_DeInit();
+    g_adc_finished = RESET;
+    g_ad_value = 0;
 }
 #if 1 
 void adc1_isr(void)
 {
     /* Get converted value */
     g_ad_value = ADC1_GetConversionValue( ); 
-    print_u16("ADC",g_ad_value);
+    print_u16 ("ADC[",g_ad_value);print("]");
  
     g_adc_finished = SET;
     ADC1_ClearITPendingBit(ADC1_IT_EOC);
@@ -45,7 +45,7 @@ void adc1_isr(void)
 void ADC1_C4_Init(void)  //co2
 {
     //ADC1_DeInit();
-   
+    adc1_reset();
     //GPIO_Init(GPIOD,GPIO_PIN_3,GPIO_MODE_IN_PU_NO_IT);//AIN4 IO设置为上拉输入
          //sensor vcc enable
     GPIOD->DDR &=(u8)( ~GPIO_PIN_3);
@@ -86,6 +86,7 @@ void ADC1_C4_Init(void)  //co2
  
 void ADC1_C3_Init(void)  //PM25
 {
+    adc1_reset();
     //GPIO_Init(GPIOB, GPIO_PIN_0, GPIO_MODE_IN_FL_NO_IT); 
     //ADC1_DeInit();
     //GPIO_Init(GPIOD,GPIO_PIN_2,GPIO_MODE_IN_PU_NO_IT);//AIN3 IO设置为上拉输入
