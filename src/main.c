@@ -60,7 +60,8 @@ void main()
     CLK_SYSCLKConfig(CLK_PRESCALER_CPUDIV1);    /*CLK_PRESCALER_CPUDIV128*/   // set system clock 2 div freq //system 8M speed running 
     #endif
     g_system_sensor_detect_timer_flag = 0; 
-	
+	    pm25_init();
+    co2_init();
 	// beep and lcd
     uart1_init(); 
     lcd_init();
@@ -82,8 +83,7 @@ void main()
     pwm_init();
     
  
-    pm25_init();
-    co2_init();
+
  
     //timer4_init();
 
@@ -96,23 +96,19 @@ void main()
       
     }
     #endif        
-        
-    while(0)
-    {
-        pm25_led_on(); pm25_power_on();delay_ms(500);
-        pm25_led_off(); pm25_power_off();delay_ms(500);
-    }
+   
     #if 1   //test ad lcd and touch
     while( 1 )
     {
+        //print("PO000");
         if(g_touch_power_long_pressed)
         {
             touch_key_power_long_press();
             g_touch_power_long_pressed = RESET;
         }
         pm25_power_on();
-
-        delay_ms(2);// wait sensor stable 
+ 
+        delay_ms(20);// wait sensor stable 
         //begint c02-------------
         //ADC start
         ADC1_C4_Init();
@@ -120,18 +116,19 @@ void main()
         while( RESET == g_adc_finished){ nop();nop();}//wait adc finished
         g_adc1_co2_ad_value = g_ad_value; 
         co2_calculate_density(g_adc1_co2_ad_value);
-          
+        print("PO222"); 
         //begint PM25-------------
         //ADC start
-        pm25_led_on();
+        pm25_led_on(); 
         delay_280us();
         ADC1_C3_Init();
-        //adc1_start();
+   
         while( RESET == g_adc_finished){ nop();nop();}//wait adc finished          
-         pm25_led_off();
         g_adc1_pm25_ad_value = g_ad_value;
-        pm25_calculate_density(g_adc1_pm25_ad_value);
-        delay_ms(5000);
+        pm25_power_off();  //print("PO333");  
+        pm25_calculate_density(g_adc1_pm25_ad_value); 
+
+        delay_ms(500);//print("PO444");  
     }
     #endif
      

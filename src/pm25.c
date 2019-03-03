@@ -66,9 +66,10 @@ void pm25_calculate_density(uint16_t mv)
 }
 
 void pm25_power_off(void)
-{
+{  
     PM25_POWER_PORT->ODR &= (uint8_t)(~PM25_POWER_PIN);
     g_pm25_is_power_on = 0;
+    pm25_led_on();
 }
 
 
@@ -76,6 +77,7 @@ void pm25_power_on(void)
 {
     PM25_POWER_PORT->ODR |= (uint8_t)( PM25_POWER_PIN);
     g_pm25_is_power_on = 1;
+    pm25_led_off();
 }
 
 
@@ -112,7 +114,7 @@ void pm25_init(void)
 {
     PM25_LED_PORT->DDR |= PM25_LED_PIN;    
     PM25_LED_PORT->CR1 |= PM25_LED_PIN;    
-    PM25_LED_PORT->CR2 |= PM25_LED_PIN; //&=(u8)( ~(PM25_LED_PIN));  
+    PM25_LED_PORT->CR2 &=(u8)( ~(PM25_LED_PIN));  
     PM25_POWER_PORT->DDR |= PM25_POWER_PIN;    
     PM25_POWER_PORT->CR1 |= PM25_POWER_PIN;    
     PM25_POWER_PORT->CR2  &=(u8)( ~(PM25_POWER_PIN));  

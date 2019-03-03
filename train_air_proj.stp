@@ -27,7 +27,7 @@ Debug=$(TargetFName)
 [Root]
 ElemType=Project
 PathName=train_air_proj
-Child=Root.stm8s_stdperiph_driver\src\stm8s_util.c
+Child=Root.Extern_src
 Config.0=Root.Config.0
 Config.1=Root.Config.1
 
@@ -219,69 +219,10 @@ String.6.0=2019,1,30,22,11,59
 String.2.0=Performing Custom Build on $(InputFile)
 String.6.0=2019,1,30,22,11,59
 
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c]
-ElemType=File
-PathName=stm8s_stdperiph_driver\src\stm8s_util.c
-Next=Root.Extern_src
-Config.0=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0
-Config.1=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0]
-Settings.0.0=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0.Settings.0
-Settings.0.1=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0.Settings.1
-Settings.0.2=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0.Settings.2
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1]
-Settings.1.0=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1.Settings.0
-Settings.1.1=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1.Settings.1
-Settings.1.2=Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1.Settings.2
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0.Settings.0]
-String.6.0=2019,2,23,10,47,28
-String.8.0=Debug
-Int.0=0
-Int.1=0
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0.Settings.1]
-String.2.0=Performing Custom Build on $(InputFile)
-String.3.0=
-String.4.0=
-String.5.0=
-String.6.0=2019,1,30,22,11,59
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.0.Settings.2]
-String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +mods0 -customOpt +split -customC -pp -ih $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
-String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
-String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2019,2,2,21,29,1
-String.8.0=Debug
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1.Settings.0]
-String.6.0=2019,2,23,10,47,28
-String.8.0=Release
-Int.0=0
-Int.1=0
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1.Settings.1]
-String.2.0=Performing Custom Build on $(InputFile)
-String.3.0=
-String.4.0=
-String.5.0=
-String.6.0=2019,1,30,22,11,59
-
-[Root.stm8s_stdperiph_driver\src\stm8s_util.c.Config.1.Settings.2]
-String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +mods0 -customOpt +compact +split -customC-pp -customLst -ih $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
-String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
-String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2019,2,8,14,6,20
-String.8.0=Release
-
 [Root.Extern_src]
 ElemType=Folder
 PathName=Extern_src
-Child=Root.Extern_src.stm8s_stdperiph_driver\src\stm8s_exti.c
+Child=Root.Extern_src.stm8s_stdperiph_driver\src\stm8s_util.c
 Next=Root.Source Files
 Config.0=Root.Extern_src.Config.0
 Config.1=Root.Extern_src.Config.1
@@ -351,6 +292,11 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2019,1,30,22,11,59
+
+[Root.Extern_src.stm8s_stdperiph_driver\src\stm8s_util.c]
+ElemType=File
+PathName=stm8s_stdperiph_driver\src\stm8s_util.c
+Next=Root.Extern_src.stm8s_stdperiph_driver\src\stm8s_exti.c
 
 [Root.Extern_src.stm8s_stdperiph_driver\src\stm8s_exti.c]
 ElemType=File
