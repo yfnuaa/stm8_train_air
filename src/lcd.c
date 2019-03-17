@@ -10,8 +10,8 @@
 #include "pwm.h"
 #include "debug.h"
 
-#define LCD_BACK_LIGHT_PORT       GPIOB
-#define LCD_BACK_LIGHT_PIN        GPIO_PIN_4
+#define LCD_BACK_LIGHT_PORT       GPIOD
+#define LCD_BACK_LIGHT_PIN        GPIO_PIN_6
 
 #define LCD_DA_PORT         GPIOA
 #define LCD_DA_PIN          GPIO_PIN_2    
@@ -266,14 +266,17 @@ void lcd_tone_on(void)
 
 void lcd_back_light_on(void)
 {
+    print("lcd_back_light_on");
     LCD_BACK_LIGHT_PORT->ODR |= (uint8_t)( LCD_BACK_LIGHT_PIN);
 }
 
 
 void lcd_back_light_off(void)
 {
+    print("lcd_back_light_off");
     LCD_BACK_LIGHT_PORT->ODR &= (uint8_t)(~LCD_BACK_LIGHT_PIN);
 }
+
 void lcd_on(void)
 {
     ht1621_write_command(LCDON);
@@ -332,9 +335,16 @@ void lcd_display_pm25( uint16_t pm25 )
 }
 
 
-void lcd_display_co2( uint16_t c02 )
+void lcd_display_co2( uint16_t c022 )
 {//CO2 value
     u8 temp=0;
+    uint16_t c02 = c022;
+    
+    if( c02 > 999 )
+    {
+        c02 = 999;
+    }
+    
     temp = (u8)(c02/100);
   
     c02%=100;
@@ -370,15 +380,21 @@ void lcd_display_co2( uint16_t c02 )
 #endif
 void lcd_light_mode_manual(void)
 {    
-    g_Ht1621Tab[6]|= 0x02; ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[0]); //S6     //manual icon
+    g_Ht1621Tab[6]|= 0x02; ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S6     //manual icon
+     g_Ht1621Tab[6]&= (u8)(~0x04);ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S7     //automocit icon
+     g_Ht1621Tab[6]&= (u8)(~0x08);ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S8     //sleep mode icon
 }
 void lcd_light_mode_auto(void)
 {
-    g_Ht1621Tab[6]|= 0x04;ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[0]); //S7     //automocit icon
+    g_Ht1621Tab[6]|= 0x04;ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S7     //automocit icon
+     g_Ht1621Tab[6]&= (u8)(~0x02); ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S6     //manual icon
+      g_Ht1621Tab[6]&= (u8)(~0x08);ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S8     //sleep mode icon
 }
 void lcd_light_mode_sleep(void)
 {
-    g_Ht1621Tab[6]|= 0x08;ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[0]); //S8     //sleep mode icon
+    g_Ht1621Tab[6]|= 0x08;ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S8     //sleep mode icon
+    g_Ht1621Tab[6]&= (u8)(~0x02); ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S6     //manual icon
+    g_Ht1621Tab[6]&= (u8)(~0x04);ht1621_write_one_data_4bits((u8)(13),  g_Ht1621Tab[6]); //S7     //automocit icon
 }
 
 
@@ -406,22 +422,6 @@ void lcd_display_fan_speed( u8 step)
     }
     //ht1621_write_one_data_4bits((u8)(7<<1),g_Ht1621Tab[7]);
     ht1621_write_one_data_4bits((u8)(14 ),(u8)(g_Ht1621Tab[7]>>4));
-#if 0
-    switch( step )
-     {
-        case e_speed_low:
-        break;
-            
-        case e_speed_middle:
-        break;
-            
-        case e_speed_high:
-        break;
-            
-        default:
-        break;
-    }
-#endif
 }
 
 
@@ -440,7 +440,6 @@ void lcd_display_air_quality( uint16_t air_quality )
     {
         ht1621_write_one_data_4bits(12,2);
     }
- 
 }
 
 
@@ -449,9 +448,9 @@ void lcd_init(void)
 {
     u8 i = 0;
     
-    //GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_OD_LOW_FAST);
-    //GPIO_Init(GPIOA, GPIO_PIN_2, GPIO_MODE_OUT_OD_LOW_FAST);
-    //GPIO_Init(GPIOA, GPIO_PIN_1, GPIO_MODE_OUT_OD_LOW_FAST);
+    LCD_BACK_LIGHT_PORT->DDR |= (u8)LCD_BACK_LIGHT_PIN;
+    LCD_BACK_LIGHT_PORT->CR1 &= (u8)(~LCD_BACK_LIGHT_PIN); 
+    LCD_BACK_LIGHT_PORT->CR2 &= (u8)(~LCD_BACK_LIGHT_PIN);
     LCD_CS_PORT->DDR |= (u8)LCD_CS_PIN;
     LCD_CS_PORT->CR1 &= (u8)(~LCD_CS_PIN);
     LCD_CS_PORT->CR2 &= (u8)(~LCD_CS_PIN);
@@ -472,10 +471,23 @@ void lcd_init(void)
         g_Ht1621Tab[i]=0;
     }    
 
-    lcd_back_light_on();
     lcd_tone_off();
 }
-void lcd_test(void)
+
+//系统上电显示 TODO
+extern u16 g_air_quality ;
+extern u16 g_pm25_dust_density_ug_m3;
+extern u16 g_co2_density_mg_m3;
+void lcd_display_power_on_mode(void)
+{
+    lcd_display_co2(888);
+    lcd_display_pm25(888);
+    lcd_display_fan_speed(e_speed_low);
+    lcd_display_air_quality(  0 );
+}
+
+//系统进入 power_on 模式 显示动画
+void lcd_display_switch_on(void)
 {   u16 i;
     u16 j;
     //u8 Ht1621Tab[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -493,37 +505,37 @@ void lcd_test(void)
 						temp = (u8)(temp>>4);
             ht1621_write_one_data_4bits((u8)(i*2+1),temp);
             j=(j<<1)+1;
-            delay_ms(30);
+            delay_ms(100);
         }
     }
     ht1621_write_all_data(0,g_Ht1621Tab,8);
-    delay_ms(300);
+    delay_ms(100);
+#if 0    
+    lcd_light_mode_manual();delay_ms(30);
+    lcd_light_mode_auto();delay_ms(30);
+    lcd_light_mode_sleep();delay_ms(30);
     
-    lcd_light_mode_manual();
-    lcd_light_mode_auto();
-    lcd_light_mode_sleep();
     
     
-    
-    ht1621_light_up_always_on_seg();
+   // ht1621_light_up_always_on_seg();
     
     lcd_display_air_quality(0);
     lcd_display_fan_speed(0); 
-    delay_ms(300);
+    delay_ms(100);
     lcd_display_air_quality(1);
     lcd_display_fan_speed(e_speed_low);
-    delay_ms(300);
+    delay_ms(100);
     lcd_display_air_quality(2);
     lcd_display_fan_speed(e_speed_middle);
-    delay_ms(300);
+    delay_ms(100);
     lcd_display_fan_speed(e_speed_high);
-     for(i=0;i<1000;i+=111)
+    for(i=0;i<1000;i+=111)
     {  
     lcd_display_pm25(i);
     //    for(i=0;i<999;i++)
      lcd_display_co2(i);
-     delay_ms(200);;
-     }
-    
+     delay_ms(20);;
+    }
+#endif    
 }
 
