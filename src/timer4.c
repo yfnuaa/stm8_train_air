@@ -77,13 +77,9 @@ void timer4_start_40us(void)
     TIM4_Cmd(ENABLE);  
 }
 #endif
-
-
-
-volatile u16 g_10ms_delay_count = 0;
+volatile u16 g_10ms_delay_count = 0;    //不知道 这个的作用
 void timer4_isr(void)  // 1ms timer
-{   
-    print("xvr"); 
+{
     if(g_10ms_delay_count)
     {
         g_10ms_delay_count --;
@@ -93,20 +89,20 @@ void timer4_isr(void)  // 1ms timer
         touch_key_Init();
         TIM4_Cmd(DISABLE); 
     }
+         
     TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
-    TIM4_Cmd(ENABLE);
 }
 void timer4_init()
 {
-    TIM4_DeInit();
-    #ifdef USE_DEFAULT_CLK_2M
+    TIM4_Cmd(DISABLE);  
+    TIM4_DeInit();  
+      #ifdef USE_DEFAULT_CLK_2M
     TIM4_TimeBaseInit(TIM4_PRESCALER_32,  63);     //16us each timer   16 * 63 = 1ms.   
-    #else
-    TIM4_TimeBaseInit(TIM4_PRESCALER_128, 125);//0x7D);       //8 us each timer   8 * 125 = 1ms.   
-    #endif
-    //TIM4_PrescalerConfig(TIM4_PRESCALER_128,TIM4_PSCRELOADMODE_IMMEDIATE);
-    TIM4_ARRPreloadConfig(ENABLE);     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE); 
-    TIM4_Cmd(ENABLE);                   //使能计时器  
+        #else
+        TIM4_TimeBaseInit(TIM4_PRESCALER_128, 0x7D);       //8 us each timer   8 * 125 = 1ms.   
+        #endif
+    TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);    
+    TIM4_ARRPreloadConfig(ENABLE);  
 }
 void timer4_start()
 {

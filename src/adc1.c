@@ -18,6 +18,7 @@
 #define VOLTAGE_MG812_REF               500.0   //mv
 
 
+#if 0
 uint16_t g_adc1_pm25_ad_value;     //mv    --> Channel AIN3
 uint16_t g_adc1_co2_ad_value;      //mv    --> Channel AIN4    (MG812输出: 200mv~400mv, 这里放大 10 倍)
 uint8_t  g_adc1_is_ok;
@@ -73,4 +74,4 @@ void adc1_init(void)
   ADC1->CR1 |= ADC1_CR1_ADON;
 }
 
-
+#endif

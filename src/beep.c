@@ -24,6 +24,9 @@ volatile uint8_t g_beep_is_on = 0;
 volatile uint8_t g_beep_timer_counter = 0;   // *10ms
 volatile uint8_t g_beep_need_on = 0;
 
+volatile uint8_t g_need_beep_alarm = 0;       //需要开启 beep 报警,用于 启动 beep
+volatile uint8_t g_beep_alarm_count = 0;    //for alarm
+
 void beep_derect_on(void)
 {
     #if GPIO_BUZZER
@@ -53,17 +56,19 @@ void beep_on_ms(uint16_t ms)
     g_beep_timer_counter = (uint8_t)(ms/10);
     beep_derect_on();
 }
-#if GPIO_BUZZER
+
 
 void beep_init(void)
 {
     //GPIO_Init(GPIOD,GPIO_PIN_4,GPIO_MODE_OUT_OD_LOW_FAST);
     //GPIO_Init(GPIOD,GPIO_PIN_4, GPIO_MODE_OUT_PP_LOW_SLOW); 
- 
+    
+    #if GPIO_BUZZER
     BEEP_GPIO_PORT->DDR |= GPIO_PIN_4;
     BEEP_GPIO_PORT->CR1 |= GPIO_PIN_4;
     BEEP_GPIO_PORT->CR2 &=(u8)( ~(GPIO_PIN_4));
+    #endif
  
 }
-#endif
+
 

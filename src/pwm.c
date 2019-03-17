@@ -16,7 +16,37 @@
 u8 g_pwm_motor_speed_step = e_speed_off;
 
 
- 
+void print_pwm_step(enum pwm_motor_speed_step step)
+{
+    switch( step )
+    {
+        case e_speed_off:
+            print("PWM Set --> Off");
+            break;
+            
+        case e_speed_low:
+            print("PWM Set --> Low");
+            break;
+            
+        case e_speed_middle:
+            print("PWM Set --> Mid");
+            break;
+            
+        case e_speed_high:
+            print("PWM Set --> High");
+            break;
+            
+        case e_speed_full:
+            print("PWM Set --> Full");
+            break;
+            
+        default:
+            print_u8("PWM Set --> ", (uint8_t)step);
+            break;
+    }
+}
+
+
 void pwm_set_duty(u8  step)
 {
     if(step>=e_speed_full) 
@@ -33,7 +63,7 @@ void pwm_set_freq(u16 freq)
   
     if(freq>3000) return;
     //freq = 333+((3000-freq)*5.5);print_u16("freq_COUNTRR",freq);
-if(0==freq){TIM2_DeInit();return;};
+    if(0==freq){TIM2_DeInit();return;};
     freq =(u16)( 1000000/freq);
     print_u16("freq",freq);
     TIM2_DeInit();
@@ -55,18 +85,19 @@ void pwm_stop(void)
 }
 
 
-void pwm_set_motor_speed(u8 step)
+void pwm_set_motor_speed(enum pwm_motor_speed_step step)
 {
-    if(step>e_speed_full)  step = e_speed_full-3;
+    if(step>e_speed_full)  
+    {
+        step = e_speed_full-3;
+    }
+
+    print_pwm_step(step);
+    
     if(g_pwm_motor_speed_step != step)
     {
         g_pwm_motor_speed_step = step;
-        #ifdef USE_DEFAULT_CLK_2M
-        pwm_set_duty(step);
-        #else
-        TIM2_SetCompare3(8*step); 
-        #endif
-        g_pwm_motor_speed_step = step;
+        pwm_set_freq(g_pwm_motor_speed_step*30);
         lcd_display_fan_speed(g_pwm_motor_speed_step);
     }
 }
@@ -93,15 +124,18 @@ void pwm_set_motor_speed_up(void)
             break;
             
         case e_speed_high:
-            //TODO
+            return;
+            //step = e_speed_high;
             break;
             
         default:
             break;
     }
 
-    pwm_set_duty(step);
-    g_pwm_motor_speed_step = step;
+    print_pwm_step(step);
+    
+    pwm_set_motor_speed(step);
+    //lcd_display_fan_speed(g_pwm_motor_speed_step);
 }
 
 
@@ -114,7 +148,7 @@ void pwm_set_motor_speed_down(void)
     switch( g_pwm_motor_speed_step )
     {
         case e_speed_off:
-            //TODO
+            return;
             break;
             
         case e_speed_low:
@@ -129,23 +163,34 @@ void pwm_set_motor_speed_down(void)
             step = e_speed_middle;
             break;
             
+       // case e_speed_full:
+       //     step = e_speed_high;
+        //    break;
+            
         default:
             break;
     }
 
-    pwm_set_duty(step);
-    g_pwm_motor_speed_step = step;
+    print_pwm_step(step);
+    
+    pwm_set_motor_speed(step);
+    //lcd_display_fan_speed(g_pwm_motor_speed_step);
 }
 
 
-void pwm_init()
+void pwm_init(void)
 { 
-    #ifdef USE_DEFAULT_CLK_2M
-    TIM2_TimeBaseInit(TIM2_PRESCALER_2, 0);//  f=20k  T = 50us
-    #else
-    TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0);//  f=20k  T = 50us     800*(1/16000000) = 50 us
-    #endif
+        #ifdef USE_DEFAULT_CLK_2M
+    TIM2_TimeBaseInit(TIM2_PRESCALER_1, 100);//  f=20k  T = 50us
+        #else
+    TIM2_TimeBaseInit(TIM2_PRESCALER_1, 800);//  f=20k  T = 50us     800*(1/16000000) = 50 us
+        #endif
+        
     TIM2_OC3Init(TIM2_OCMODE_PWM1, TIM2_OUTPUTSTATE_ENABLE, 0, TIM2_OCPOLARITY_HIGH);  //0 duty pwm init        
     TIM2_OC3PreloadConfig(ENABLE);
     TIM2_Cmd(ENABLE);  
+}
+void pwm_close(void)
+{
+    TIM2_Cmd(DISABLE);
 }
