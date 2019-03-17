@@ -25,17 +25,17 @@ void adc1_reset(void)
     g_adc_finished = RESET;
     g_ad_value = 0;
 }
-#if 1 
+#if 1
 void adc1_isr(void)
 {
     /* Get converted value */
-    g_ad_value = ADC1_GetConversionValue( ); 
-    print_u16 ("ADC[",g_ad_value);print("]");
+    g_ad_value = ADC1_GetConversionValue(); 
+    print_u16 ("ADC[ccc",g_ad_value);print("]");
  
     g_adc_finished = SET;
     ADC1_ClearITPendingBit(ADC1_IT_EOC);
 }
- #endif
+#endif
 //PD_DDR     CR1      CR2
 //  0         0        0    float             input     pullup resistor is off
 //  0         1        0    pullup            input     pullup resistor is on 
@@ -62,25 +62,22 @@ void ADC1_C4_Init(void)  //co2
    /**DISABLE ADC2_SchmittTriggerState*/
    ADC1_Init(ADC1_CONVERSIONMODE_SINGLE , ADC1_CHANNEL_4, ADC1_PRESSEL_FCPU_D18,
    ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL4,DISABLE);
-   ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
-   
-   
 #else // CONVERSIONMODE ==CONVERSIONMODE_CONTINUOUS
-   /**< Continuous conversion mode */
-   /**< Analog channel 10 */
-   /**< Prescaler selection fADC2 = fcpu/18 */
-   /**< Conversion from Internal TIM TRGO event */
-   /** DISABLE ADC2_ExtTriggerState**/
-   /**< Data alignment right */
-   /**< Schmitt trigger disable on AIN10 */
-   /**DISABLE ADC2_SchmittTriggerState*/
-   ADC1_Init(ADC1_CONVERSIONMODE_CONTINUOUS , ADC1_CHANNEL_4, ADC1_PRESSEL_FCPU_D18,
-   ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL4,DISABLE);
-   ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
+    /**< Continuous conversion mode */
+    /**< Analog channel 10 */
+    /**< Prescaler selection fADC2 = fcpu/18 */
+    /**< Conversion from Internal TIM TRGO event */
+    /** DISABLE ADC2_ExtTriggerState**/
+    /**< Data alignment right */
+    /**< Schmitt trigger disable on AIN10 */
+    /**DISABLE ADC2_SchmittTriggerState*/
+    ADC1_Init(ADC1_CONVERSIONMODE_CONTINUOUS , ADC1_CHANNEL_4, ADC1_PRESSEL_FCPU_D2,
+    ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL4,DISABLE);
+    ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
 #endif
-   
+    ADC1_ITConfig(ADC1_IT_EOCIE, DISABLE);   
     ADC1_Cmd(ENABLE);
-    ADC1_StartConversion();
+    //ADC1_StartConversion();
 }
 
  
@@ -94,35 +91,33 @@ void ADC1_C3_Init(void)  //PM25
     GPIOD->CR1 |= GPIO_PIN_2;
     GPIOD->CR2 &=(u8)( ~GPIO_PIN_2);
 #ifdef CONVERSIONMODE_SINGLE
-   /**< Single conversion mode */
-   /**< Analog channel 10 */
-   /**< Prescaler selection fADC2 = fcpu/18 */
-   /**< Conversion from Internal TIM TRGO event */
-   /** DISABLE ADC2_ExtTriggerState**/
-   /**< Data alignment right */
-   /**< Schmitt trigger disable on AIN10 */
-   /**DISABLE ADC2_SchmittTriggerState*/
-   ADC1_Init(ADC1_CONVERSIONMODE_SINGLE , ADC1_CHANNEL_3, ADC1_PRESSEL_FCPU_D18,
-   ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL3,DISABLE);
-   ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
-   
-   
+    /**< Single conversion mode */
+    /**< Analog channel 10 */
+    /**< Prescaler selection fADC2 = fcpu/18 */
+    /**< Conversion from Internal TIM TRGO event */
+    /** DISABLE ADC2_ExtTriggerState**/
+    /**< Data alignment right */
+    /**< Schmitt trigger disable on AIN10 */
+    /**DISABLE ADC2_SchmittTriggerState*/
+    ADC1_Init(ADC1_CONVERSIONMODE_SINGLE , ADC1_CHANNEL_3, ADC1_PRESSEL_FCPU_D2,//,
+    ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL3,DISABLE);
+ 
 #else //CONVERSIONMODE_CONTINUOUS
-   /**< Continuous conversion mode */
-   /**< Analog channel 10 */
-   /**< Prescaler selection fADC2 = fcpu/18 */
-   /**< Conversion from Internal TIM TRGO event */
-   /** DISABLE ADC2_ExtTriggerState**/
-   /**< Data alignment right */
-   /**< Schmitt trigger disable on AIN10 */
-   /**DISABLE ADC2_SchmittTriggerState*/
-   ADC1_Init(ADC1_CONVERSIONMODE_CONTINUOUS , ADC1_CHANNEL_3, ADC1_PRESSEL_FCPU_D18,
-   ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL3,DISABLE);
-   ADC1_ITConfig(ADC1_IT_EOCIE, ENABLE);
+    /**< Continuous conversion mode */
+    /**< Analog channel 10 */
+    /**< Prescaler selection fADC2 = fcpu/18 */
+    /**< Conversion from Internal TIM TRGO event */
+    /** DISABLE ADC2_ExtTriggerState**/
+    /**< Data alignment right */
+    /**< Schmitt trigger disable on AIN10 */
+    /**DISABLE ADC2_SchmittTriggerState*/
+    ADC1_Init(ADC1_CONVERSIONMODE_CONTINUOUS , ADC1_CHANNEL_3, ADC1_PRESSEL_FCPU_D2,
+    ADC1_EXTTRIG_TIM, DISABLE, ADC1_ALIGN_RIGHT, ADC1_SCHMITTTRIG_CHANNEL3,DISABLE);
+
 #endif
-   
+    ADC1_ITConfig(ADC1_IT_EOCIE, DISABLE);   
     ADC1_Cmd(ENABLE);
-   ADC1_StartConversion();
+    // ADC1_StartConversion();
 }
 #if 0
 void  adc_init(void)
