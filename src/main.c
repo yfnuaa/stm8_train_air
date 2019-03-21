@@ -300,6 +300,8 @@ void main()
             g_need_operate_after_mode_switch = 1;
             g_last_system_mode = g_system_mode;
         }
+		if(!g_need_operate_after_mode_switch)
+			continue;
         switch(g_last_system_mode)
         {   
             // power_on mode

@@ -54,8 +54,8 @@ void co2_calculate_density(uint16_t mv)
 
     //u16 calcVoltage =  g_adc1_co2_ad_value * (5000  / 1023)/11;             // unit mv
     //  11 bei 0.444
-    //  6 bei  0.814
-    calc_raw_Voltage_mv = calc_raw_Voltage_mv *0.815;       // unit mv
+    //  6  bei 0.814
+    calc_raw_Voltage_mv = calc_raw_Voltage_mv *0.814;       // unit mv
     g_adc1_co2_ad_value= (u16)(calc_raw_Voltage_mv);
 
     print_u16("co2 ad mv ==================== ", g_adc1_co2_ad_value);
@@ -84,7 +84,7 @@ void co2_calculate_density(uint16_t mv)
     {
         g_co2_density_mg_m3 = (u16)(1.9643 * co2ppm);
     }
-    
+    if(g_co2_density_mg_m3 > 999)g_co2_density_mg_m3 = 999;
     print_u16("co2 value mg/m3  ================ ", g_co2_density_mg_m3);
     //lcd_display_co2(g_co2_density_mg_m3);
 }

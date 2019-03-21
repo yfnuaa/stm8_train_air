@@ -234,12 +234,13 @@ void ht1621_light_up_always_on_seg(void)
 版 本：1.0
 说 明：初始化后，液晶屏所有字段均显示
 ********************************************************/
+#if 0
 void ht1621_init(void)
 {
     CS_HIGH;
     WR_HIGH;
     DA_HIGH;
-    
+    delay_ms(500);
    //  DelayMS(2000);      //延时使LCD工作电压稳定
     ht1621_write_command(BIAS_1_3BIAS);
     ht1621_write_command(RC256 ); //使用内部振荡器
@@ -250,7 +251,7 @@ void ht1621_init(void)
 
     ht1621_write_command(TONEFRE2K ); 
 }
-
+#endif
 
 void lcd_tone_off(void)
 {
@@ -339,14 +340,9 @@ void lcd_display_co2( uint16_t c022 )
 {//CO2 value
     u8 temp=0;
     uint16_t c02 = c022;
-    
-    if( c02 > 999 )
-    {
-        c02 = 999;
-    }
-    
+
     temp = (u8)(c02/100);
-  
+    if(temp>0xf)temp = 0xf;
     c02%=100;
     temp = DIG_CODE[temp]; //led digital 4  C02 hundred dig
     ht1621_fill_digital_code(5, temp);
@@ -463,14 +459,22 @@ void lcd_init(void)
     LCD_DA_PORT->CR1 &= (u8)(~LCD_DA_PIN);
     LCD_DA_PORT->CR2 &= (u8)(~LCD_DA_PIN);
     
-    ht1621_init();
-    
- 
+    CS_HIGH;
+    WR_HIGH;
+    DA_HIGH;
     for(i=0;i<8;i++)
     {
         g_Ht1621Tab[i]=0;
-    }    
-
+    }  
+    delay_ms(500);
+    //  DelayMS(2000);      //延时使LCD工作电压稳定
+    ht1621_write_command(BIAS_1_3BIAS);
+    ht1621_write_command(RC256 ); //使用内部振荡器
+    ht1621_write_command(SYSDIS);
+    ht1621_write_command(WDTDIS);
+    ht1621_write_command(SYSEN );
+    ht1621_write_command(LCDON );
+    ht1621_write_command(TONEFRE2K ); 
     lcd_tone_off();
 }
 
