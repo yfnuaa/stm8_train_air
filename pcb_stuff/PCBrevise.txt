@@ -16,3 +16,8 @@
 15， MG812 CO2小板子也要准备了。 只留3Pin的2.54插口
 
 version 3 PD4 PD5  上拉
+
+version 4
+
+
+touch 屏与芯片直接留电阻，降低灵敏度。
