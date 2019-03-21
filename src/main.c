@@ -332,7 +332,8 @@ void main()
                 lcd_back_light_on();
                 lcd_display_switch_on();
                 ht1621_light_up_always_on_seg();
-                
+                lcd_display_co2(0);
+				lcd_display_pm25(0);
                 /* 3. */
                 /* 4. */
                 g_system_need_detect = 1;

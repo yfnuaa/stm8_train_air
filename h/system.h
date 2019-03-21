@@ -11,7 +11,7 @@
 #define __SYSTEM_H___
 
 #include "stm8s.h"
-
+#define SYS_VERSION 1030
 //#define USE_DEFAULT_CLK_2M
 #define DEBUG   		1
 #define RUIZHU_TEST		0	//…Ë÷√ 0 or 1 To disable or enable

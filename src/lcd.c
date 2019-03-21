@@ -160,8 +160,8 @@ seg1  D0   D1    D2     D3  | 1
                   
 
      com0 com1 com2   com3  |ADDr
-seg0  D0   D1    D2     D3  | 0
-seg1  D0   D1    D2     S3  | 1
+seg0  D7   D6    D5     D4  | 0
+seg1  D3   D2    D1     S3  | 1
 
 seg2                        | 2
 seg3                    S4  | 3
@@ -193,7 +193,7 @@ void ht1621_light_up_always_on_seg(void)
     g_Ht1621Tab[6]|= 0x01;ht1621_write_one_data_4bits((u8)(13), g_Ht1621Tab[6]);//S5   air quality index
     g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(14), (u8)(g_Ht1621Tab[7]>>4));//S10  Fan step index
     
-    g_Ht1621Tab[3]|= 0x1; ht1621_write_one_data_4bits((u8)(7), (u8)(g_Ht1621Tab[3]));//S17   dan wei step index
+    g_Ht1621Tab[3]|= 0x01; ht1621_write_one_data_4bits((u8)(7), (u8)(g_Ht1621Tab[3]));//S17   dan wei step index
 }           
  void ht1621_fill_digital_code(u8 di, u8 temp)
 {
@@ -394,7 +394,6 @@ void lcd_display_fan_speed( u8 step)
     { 
         //g_Ht1621Tab[7]|= 0x10;    
         g_Ht1621Tab[7]&= (u8)(~0xE0);
- 
     }
     else if(step<=e_speed_low)
     {
@@ -460,8 +459,7 @@ void lcd_init(void)
     {
         g_Ht1621Tab[i]=0;
     }  
-    delay_ms(500);
-    //  DelayMS(2000);      //延时使LCD工作电压稳定
+    delay_ms(500); //延时使LCD工作电压稳定
     ht1621_write_command(BIAS_1_3BIAS);
     ht1621_write_command(RC256 ); //使用内部振荡器
     ht1621_write_command(SYSDIS);
@@ -478,10 +476,10 @@ extern u16 g_pm25_dust_density_ug_m3;
 extern u16 g_co2_density_mg_m3;
 void lcd_display_power_on_mode(void)
 {
-    lcd_display_co2(888);
-    lcd_display_pm25(888);
-    lcd_display_fan_speed(e_speed_low);
-    lcd_display_air_quality(  0 );
+    lcd_display_co2 (SYS_VERSION);
+    lcd_display_pm25(SYS_VERSION);
+    lcd_display_fan_speed(0);
+    lcd_display_air_quality( 0 );
 }
 
 //系统进入 power_on 模式 显示动画
@@ -497,10 +495,10 @@ void lcd_display_switch_on(void)
     {
         for(j=1;j<=0xFF;j=j)
         { 
-						u8 temp;
-						temp = (u8)(j);
+	        u8 temp;
+		    temp = (u8)(j);
             ht1621_write_one_data_4bits((u8)(i*2),temp);
-						temp = (u8)(temp>>4);
+		    temp = (u8)(temp>>4);
             ht1621_write_one_data_4bits((u8)(i*2+1),temp);
             j=(j<<1)+1;
             delay_ms(50);
