@@ -193,7 +193,7 @@ void ht1621_light_up_always_on_seg(void)
     g_Ht1621Tab[6]|= 0x01;ht1621_write_one_data_4bits((u8)(13), g_Ht1621Tab[6]);//S5   air quality index
     g_Ht1621Tab[7]|= 0x10;ht1621_write_one_data_4bits((u8)(14), (u8)(g_Ht1621Tab[7]>>4));//S10  Fan step index
     
-    g_Ht1621Tab[3]|= 0x1;ht1621_write_one_data_4bits((u8)(7), (u8)(g_Ht1621Tab[7]>>4));//S17   dan wei step index
+    g_Ht1621Tab[3]|= 0x1; ht1621_write_one_data_4bits((u8)(7), (u8)(g_Ht1621Tab[3]));//S17   dan wei step index
 }           
  void ht1621_fill_digital_code(u8 di, u8 temp)
 {
@@ -221,10 +221,6 @@ void ht1621_light_up_always_on_seg(void)
 
     ht1621_write_all_data((u8)(di*2), g_Ht1621Tab+di,1);
 }
-
-  
-
-
 /********************************************************
 函数名称：void ht1621_init(void)
 功能描述: HT1621初始化
@@ -258,19 +254,16 @@ void lcd_tone_off(void)
     ht1621_write_command(TONEOFF );
 }
 
-
 void lcd_tone_on(void)
 {
     ht1621_write_command(TONEON );
 }
-
 
 void lcd_back_light_on(void)
 {
     print("lcd_back_light_on");
     LCD_BACK_LIGHT_PORT->ODR |= (uint8_t)( LCD_BACK_LIGHT_PIN);
 }
-
 
 void lcd_back_light_off(void)
 {
@@ -283,11 +276,13 @@ void lcd_on(void)
     ht1621_write_command(LCDON);
     lcd_back_light_on();
 }
+
 void lcd_off(void)
 {
     ht1621_write_command(LCDOFF);
     lcd_back_light_off();
 }
+
 #if 0
 void lcd_update_memory_loop(void)
 {
@@ -334,7 +329,6 @@ void lcd_display_pm25( uint16_t pm25 )
     temp = DIG_CODE[pm25]; //led digital 3   ten dig
     ht1621_fill_digital_code(4, temp);
 }
-
 
 void lcd_display_co2( uint16_t c022 )
 {//CO2 value
