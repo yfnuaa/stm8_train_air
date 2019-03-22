@@ -20,4 +20,4 @@ version 3 PD4 PD5  上拉
 version 4
 
 
-touch 屏与芯片直接留电阻，降低灵敏度。
+屏幕touch引脚与芯片之间留电阻，降低灵敏度。
