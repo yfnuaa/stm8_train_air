@@ -58,15 +58,24 @@ void pwm_set_duty(u8  step)
     
     TIM2_SetCompare3(step); 
 }
+
+
+void pwm_stop(void)
+{
+    TIM2_Cmd(DISABLE);  
+    TIM2_ForcedOC3Config(TIM2_FORCEDACTION_INACTIVE);
+}
+
+
 void pwm_set_freq(u16 freq)
 { 
   
     if(freq>3000) return;
     //freq = 333+((3000-freq)*5.5);print_u16("freq_COUNTRR",freq);
-    if(0==freq){TIM2_DeInit();return;};
+    if(0==freq){ pwm_stop();return;};
     freq =(u16)( 1000000/freq);
     print_u16("freq",freq);
-    TIM2_DeInit();
+    //TIM2_DeInit();
     #ifdef USE_DEFAULT_CLK_2M
     TIM2_TimeBaseInit(TIM2_PRESCALER_2, freq);//  f=20k  T = 50us
     #else
@@ -78,13 +87,6 @@ void pwm_set_freq(u16 freq)
     
 }
 
-void pwm_stop(void)
-{
-    TIM2_Cmd(DISABLE);  
-    TIM2_ForcedOC3Config(TIM2_FORCEDACTION_INACTIVE);
-}
-
-
 void pwm_set_motor_speed(enum pwm_motor_speed_step step)
 {
     if(step>e_speed_full)  
@@ -93,12 +95,35 @@ void pwm_set_motor_speed(enum pwm_motor_speed_step step)
     }
 
     print_pwm_step(step);
+    if(g_pwm_motor_speed_step == step) return; 
     
-    if(g_pwm_motor_speed_step != step)
+    if(step > g_pwm_motor_speed_step)
     {
-        g_pwm_motor_speed_step = step;
-        pwm_set_freq(g_pwm_motor_speed_step*30);
-        lcd_display_fan_speed(g_pwm_motor_speed_step);
+        while(step>g_pwm_motor_speed_step)
+        {
+            g_pwm_motor_speed_step++;
+            if(g_pwm_motor_speed_step>step)
+               g_pwm_motor_speed_step = step;
+           
+            pwm_set_freq(g_pwm_motor_speed_step*30);
+            lcd_display_fan_speed(g_pwm_motor_speed_step);
+            delay_ms(80);
+        }
+    }
+    else
+    {
+        while(step < g_pwm_motor_speed_step)
+        {
+            g_pwm_motor_speed_step--;
+            if(step > g_pwm_motor_speed_step)
+               g_pwm_motor_speed_step = step;
+           
+            pwm_set_freq(g_pwm_motor_speed_step*30);
+            lcd_display_fan_speed(g_pwm_motor_speed_step);
+            delay_ms(80);
+        }
+        
+        
     }
 }
 
